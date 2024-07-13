@@ -23,8 +23,48 @@
 hs_err_pid*
 replay_pid*
 
-# IntelliJ
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
 *.ipr
-*.iws
-.idea/
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# Gradle specific files
+/.gradle
+/build
+
+# Windows specific files
+Thumbs.db
+
+# macOS specific files
+.DS_Store
+
+# Environment variables
+.env
+
+# Temporary files
+*.tmp
+*.swp
+
+### VS Code ###
+.vscode/
+
+### HELP.md ###
+HELP.md
+
+
