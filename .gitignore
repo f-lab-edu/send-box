@@ -252,7 +252,7 @@ gradle-app.setting
 .classpath
 
 ### Gradle Patch ###
-# Java heap dump
+# Java heap
 *.hprof
 
 ### HELP.md ###
