@@ -49,11 +49,11 @@ class BuyerCreateRequestTest {
 			new BuyerCreateRequest(email, password, name, phoneNumber, addressId, createdBy);
 
 		// then
-		assertThat(buyerCreateRequest.getEmail()).isEqualTo(email);
-		assertThat(buyerCreateRequest.getPassword()).isEqualTo(password);
-		assertThat(buyerCreateRequest.getName()).isEqualTo(name);
-		assertThat(buyerCreateRequest.getPhoneNumber()).isEqualTo(phoneNumber);
-		assertThat(buyerCreateRequest.getCreatedBy()).isEqualTo(createdBy);
-		assertThat(buyerCreateRequest.getAddressId()).isEqualTo(addressId);
+		assertThat(buyerCreateRequest.email()).isEqualTo(email);
+		assertThat(buyerCreateRequest.password()).isEqualTo(password);
+		assertThat(buyerCreateRequest.name()).isEqualTo(name);
+		assertThat(buyerCreateRequest.phoneNumber()).isEqualTo(phoneNumber);
+		assertThat(buyerCreateRequest.createdBy()).isEqualTo(createdBy);
+		assertThat(buyerCreateRequest.addressId()).isEqualTo(addressId);
 	}
 }

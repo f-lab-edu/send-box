@@ -32,9 +32,9 @@ class BuyerServiceTest {
 		BuyerResponse buyerResponse = buyerService.signUp(buyerRequest, createdAt);
 
 		// then
-		Assertions.assertThat(buyerResponse.getEmail()).isEqualTo(email);
-		Assertions.assertThat(buyerResponse.getName()).isEqualTo(name);
-		Assertions.assertThat(buyerResponse.getPhoneNumber()).isEqualTo(phoneNumber);
-		Assertions.assertThat(buyerResponse.getBuyerStatus()).isEqualTo("ACTIVE");
+		Assertions.assertThat(buyerResponse.email()).isEqualTo(email);
+		Assertions.assertThat(buyerResponse.name()).isEqualTo(name);
+		Assertions.assertThat(buyerResponse.phoneNumber()).isEqualTo(phoneNumber);
+		Assertions.assertThat(buyerResponse.buyerStatus()).isEqualTo(BuyerStatus.ACTIVE);
 	}
 }

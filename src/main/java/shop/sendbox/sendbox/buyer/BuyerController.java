@@ -3,18 +3,19 @@ package shop.sendbox.sendbox.buyer;
 import java.time.LocalDateTime;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+// 빈 등록과 해당 클래스가 컨트롤러 역할,그리고 Json 응답을 변환해주는 @RestController 애노테이션을 추가했습니다.
 @RestController
 @RequiredArgsConstructor
 public class BuyerController {
 	private final BuyerService buyerService;
-
+	// POST /buyers 요청을 처리하도록 핸들러를 등록하는 애노테이션을 추가했습니다.
 	@PostMapping("/buyers")
-	public ApiResponse<BuyerResponse> signUp(BuyerCreateRequest buyerCreateRequest) {
-
+	public ApiResponse<BuyerResponse> signUp(@RequestBody BuyerCreateRequest buyerCreateRequest) {
 		final LocalDateTime now = LocalDateTime.now();
 		BuyerResponse buyerResponse = buyerService.signUp(buyerCreateRequest.toServiceRequest(), now);
 		return ApiResponse.ok(buyerResponse);
