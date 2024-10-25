@@ -14,15 +14,15 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.sendbox.sendbox.util.EncryptUtil;
 
-// 엔티티를 생성하기 위해서 기본 생성자가 필요하지만 최소한으로 제한하기 위해 @NoArgsConstructor(access = AccessLevel.PROTECTED)를 사용했습니다.
+// @Entity 어노테이션은 JPA가 관리하는 엔티티 클래스임을 나타냅니다.
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Buyer {
-	// @Id 애노테이션을 사용하여 기본 키를 매핑했습니다.
-	// @GeneratedValue 애노테이션을 사용하여 기본 키 증분을 AUTOINCREMENT로 설정했습니다.
+	// @Id 필드는 엔티티의 primary key로 매핑합니다.
+	// @GeneratedValue는 자동으로 증가하는 값에 대한 옵션을 지정할 수 있습니다
+	// GenerationType.IDENTITY는 데이터베이스가 자동으로 증가하는 방식인 AUTO_INCREMENT를 사용합니다.
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long buyerId;
