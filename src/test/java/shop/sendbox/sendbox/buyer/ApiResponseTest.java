@@ -1,5 +1,7 @@
 package shop.sendbox.sendbox.buyer;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,10 +20,10 @@ class ApiResponseTest {
 		ApiResponse<String> apiResponse = ApiResponse.of(statusCode, message, data);
 
 		// then
-		// Assertions.assertThat(apiResponse.getStatusCode()).isEqualTo(statusCode.value());
-		// Assertions.assertThat(apiResponse.getStatus()).isEqualTo(statusCode);
-		// Assertions.assertThat(apiResponse.getMessage()).isEqualTo(message);
-		// Assertions.assertThat(apiResponse.getData()).isEqualTo(data);
+		assertThat(apiResponse.getStatusCode()).isEqualTo(statusCode.value());
+		assertThat(apiResponse.getStatus()).isEqualTo(statusCode);
+		assertThat(apiResponse.getMessage()).isEqualTo(message);
+		assertThat(apiResponse.getData()).isEqualTo(data);
 	}
 
 }
