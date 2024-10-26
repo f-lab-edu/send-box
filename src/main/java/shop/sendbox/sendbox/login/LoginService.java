@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginService {
 
-	private final List<LoginHandler> loginHandlerList;
+	private final LoginHandlers loginHandlerList;
 
 	/*
 	JPA는 기본적으로 데이터를 조회하면 스냅샷을 만들고, Dirty Checking을 통해 변경된 데이터를 감지합니다.
@@ -31,10 +31,7 @@ public class LoginService {
 	}
 
 	private LoginHandler getLoginHandler(UserType userType) {
-		return loginHandlerList.stream()
-			.filter(loginHandler -> loginHandler.supports(userType))
-			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("지원하지 않는 유저 타입입니다."));
+		return loginHandlerList.getLoginHandler(userType);
 	}
 
 }
