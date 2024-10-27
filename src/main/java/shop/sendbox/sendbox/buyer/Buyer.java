@@ -2,7 +2,7 @@ package shop.sendbox.sendbox.buyer;
 
 import static shop.sendbox.sendbox.buyer.BuyerStatus.*;
 import static shop.sendbox.sendbox.buyer.DeleteStatus.*;
-import static shop.sendbox.sendbox.util.EncryptUtil.*;
+import static shop.sendbox.sendbox.util.HashingEncrypt.*;
 
 import java.time.LocalDateTime;
 

@@ -7,7 +7,7 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
-public class EncryptUtil {
+public class HashingEncrypt {
 	static final int saltLength = 16;
 
 	public static String encrypt(String input, String salt) {
