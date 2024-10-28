@@ -8,7 +8,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 public class HashingEncrypt {
-	static final int saltLength = 16;
+	static final int SALT_LENGTH = 16;
 
 	public static String encrypt(String input, String salt) {
 		final HashCode hashCode = Hashing.sha256().hashString(input + salt, Charsets.UTF_8);
@@ -17,7 +17,7 @@ public class HashingEncrypt {
 
 	public static String generateSalt() {
 		SecureRandom random = new SecureRandom();
-		byte[] salt = new byte[saltLength];
+		byte[] salt = new byte[SALT_LENGTH];
 		random.nextBytes(salt);
 		return Base64.getEncoder().encodeToString(salt);
 	}
