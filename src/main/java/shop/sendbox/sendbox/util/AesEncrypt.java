@@ -15,6 +15,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 import lombok.extern.slf4j.Slf4j;
 
+/*
+@Slf4j 애노테이션을 클래스에 붙이면 자동으로 log 객체를 생성합니다.
+log 객체를 직접 생성하지 않고 log 메서드를 사용할 수 있습니다.
+ */
 @Slf4j
 public class AesEncrypt {
 

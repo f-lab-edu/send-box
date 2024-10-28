@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-
-// 빈 등록과 해당 클래스가 컨트롤러 역할,그리고 Json 응답을 변환해주는 @RestController 애노테이션을 추가했습니다.
-// RequiredArgsConstructor는 생성자에 필요한 필수 파라미터가 포함된 생성자를 만들어줍니다.
+/*
+빈 등록과 해당 클래스가 컨트롤러 역할,그리고 Json 응답을 변환해주는 @RestController 애노테이션을 추가했습니다.
+RequiredArgsConstructor는 생성자에 필요한 필수 파라미터가 포함된 생성자를 만들어줍니다.
+ */
 @RestController
 @RequiredArgsConstructor
 public class BuyerController {

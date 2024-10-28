@@ -19,8 +19,11 @@ public class BuyerService implements LoginHandler {
 
 	private final BuyerRepository buyerRepository;
 
-	/**
-	 * Transactional을 명시적으로 추가하여 해당 메서드는 트랜잭션 범위에서 실행됨을 명시했습니다.
+	/*
+	@Transactional 애노테이션은 메서드가 실행될 때 트랜잭션을 시작합니다.
+	메서드가 정상 종료되면 트랜잭션을 커밋합니다.
+	만약 예외가 발생하면 롤백합니다.
+	예외는 런타임 예외를 지정하거나 rollbackFor 속성을 사용하여 롤백할 예외를 지정할 수 있습니다.
 	 */
 	@Transactional
 	public BuyerResponse signUp(final BuyerRequest buyerRequest, final LocalDateTime createdAt) {
