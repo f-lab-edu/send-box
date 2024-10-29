@@ -7,7 +7,7 @@ public record LoginResponse(
 	String name,
 	String email
 ) {
-	public static LoginResponse of(Buyer buyer) {
-		return new LoginResponse(buyer.getBuyerId(), buyer.getName(), buyer.getEmail());
+	public static LoginResponse of(Buyer buyer, final String email) {
+		return new LoginResponse(buyer.getBuyerId(), buyer.getName(), email);
 	}
 }

@@ -1,23 +1,29 @@
 package shop.sendbox.sendbox.buyer;
 
+import static shop.sendbox.sendbox.util.HashingEncrypt.*;
+
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import shop.sendbox.sendbox.login.LoginHandler;
 import shop.sendbox.sendbox.login.LoginResponse;
 import shop.sendbox.sendbox.login.LoginUser;
 import shop.sendbox.sendbox.login.UserType;
+import shop.sendbox.sendbox.util.HashingEncrypt;
 
 // 서비스 클래스임을 명시하고, 컴포넌트 스캔에 포함되기 위한 @Component를 가진 메타 애노테이션을 추가했습니다.
 // RequiredArgsConstructor 애노테이션을 사용하여 final 필드를 생성자로 주입받도록 했습니다.
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BuyerService implements LoginHandler {
 
 	private final BuyerRepository buyerRepository;
+	private final SymmetricCryptoService symmetricCryptoService;
 
 	/*
 	@Transactional 애노테이션은 메서드가 실행될 때 트랜잭션을 시작합니다.
@@ -27,10 +33,14 @@ public class BuyerService implements LoginHandler {
 	 */
 	@Transactional
 	public BuyerResponse signUp(final BuyerRequest buyerRequest, final LocalDateTime createdAt) {
-		final Buyer buyer = Buyer.create(buyerRequest.email(), buyerRequest.password(), buyerRequest.name(),
+		final String encryptEmail = symmetricCryptoService.encrypt(buyerRequest.email());
+		final String salt = generateSalt();
+		final String encryptPassword = encryptPassword(buyerRequest.password(), salt);
+		log.info("encryptEmail: {}", encryptEmail);
+		final Buyer buyer = Buyer.create(encryptEmail, encryptPassword, salt, buyerRequest.name(),
 			buyerRequest.phoneNumber(), createdAt, buyerRequest.createdBy());
 		final Buyer savedBuyer = buyerRepository.save(buyer);
-		return BuyerResponse.of(savedBuyer);
+		return BuyerResponse.of(savedBuyer, buyerRequest.email(), buyerRequest.phoneNumber());
 	}
 
 	/*
@@ -44,10 +54,23 @@ public class BuyerService implements LoginHandler {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public LoginResponse login(final LoginUser user) {
-		final Buyer findBuyer = buyerRepository.findByEmail(user.email())
+		final String encryptedEmail = symmetricCryptoService.encrypt(user.email());
+		final Buyer findBuyer = buyerRepository.findByEmail(encryptedEmail)
 			.orElseThrow(() -> new IllegalArgumentException("해당 이메일로 가입된 회원이 없습니다."));
-		findBuyer.validatePassword(user.password());
-		return LoginResponse.of(findBuyer);
+		final String encryptPassword = encryptPassword(user.password(), findBuyer.getSalt());
+		validatePassword(findBuyer, encryptPassword);
+		return LoginResponse.of(findBuyer, user.email());
+	}
+
+	private void validatePassword(final Buyer findBuyer, final String encryptPassword) {
+		if (!findBuyer.isPasswordEquals(encryptPassword)) {
+			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+		}
+	}
+
+	private String encryptPassword(final String password, final String salt) {
+		return HashingEncrypt.encrypt(password, salt);
 	}
 }

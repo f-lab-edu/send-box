@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
 class BuyerCreateRequestTest {
 
 	@Test
@@ -16,12 +15,11 @@ class BuyerCreateRequestTest {
 		String password = "password";
 		String name = "홍길동";
 		String phoneNumber = "01012345678";
-		Long addressId = 5L;
 		String createdBy = "admin";
 
 		// when
 		BuyerCreateRequest buyerCreateRequest =
-			new BuyerCreateRequest(email, password, name, phoneNumber, addressId, createdBy);
+			new BuyerCreateRequest(email, password, name, phoneNumber, createdBy);
 
 		// then
 		BuyerRequest buyerRequest = buyerCreateRequest.toServiceRequest();
@@ -30,7 +28,6 @@ class BuyerCreateRequestTest {
 		assertThat(buyerRequest.name()).isEqualTo(name);
 		assertThat(buyerRequest.phoneNumber()).isEqualTo(phoneNumber);
 		assertThat(buyerRequest.createdBy()).isEqualTo(createdBy);
-		assertThat(buyerRequest.addressId()).isEqualTo(addressId);
 	}
 
 	@Test
@@ -42,11 +39,10 @@ class BuyerCreateRequestTest {
 		String name = "홍길동";
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
-		Long addressId = 5L;
 
 		// when
 		BuyerCreateRequest buyerCreateRequest =
-			new BuyerCreateRequest(email, password, name, phoneNumber, addressId, createdBy);
+			new BuyerCreateRequest(email, password, name, phoneNumber, createdBy);
 
 		// then
 		assertThat(buyerCreateRequest.email()).isEqualTo(email);
@@ -54,6 +50,5 @@ class BuyerCreateRequestTest {
 		assertThat(buyerCreateRequest.name()).isEqualTo(name);
 		assertThat(buyerCreateRequest.phoneNumber()).isEqualTo(phoneNumber);
 		assertThat(buyerCreateRequest.createdBy()).isEqualTo(createdBy);
-		assertThat(buyerCreateRequest.addressId()).isEqualTo(addressId);
 	}
 }

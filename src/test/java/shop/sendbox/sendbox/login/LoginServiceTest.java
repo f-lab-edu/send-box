@@ -5,14 +5,12 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 
 import org.assertj.core.api.Assertions;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import shop.sendbox.sendbox.buyer.Buyer;
 import shop.sendbox.sendbox.buyer.BuyerRepository;
@@ -43,7 +41,7 @@ class LoginServiceTest {
 		// given
 		String email = "test@gmail.com";
 		String password = "password";
-		BuyerRequest buyerRequest = new BuyerRequest(email, password, "홍길동", "01012345678", null, "admin");
+		BuyerRequest buyerRequest = new BuyerRequest(email, password, "홍길동", "01012345678", "admin");
 		buyerService.signUp(buyerRequest, LocalDateTime.of(2024, 10, 22, 11, 28));
 
 		UserType userType = UserType.BUYER;
@@ -78,6 +76,6 @@ class LoginServiceTest {
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		return Buyer.create(email, password, name, phoneNumber, createdAt, createdBy);
+		return Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
 	}
 }

@@ -5,7 +5,6 @@ public record BuyerRequest(
 	String password,
 	String name,
 	String phoneNumber,
-	Long addressId,
 	String createdBy
 ) {
 }

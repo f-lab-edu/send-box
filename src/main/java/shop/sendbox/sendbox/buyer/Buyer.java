@@ -2,9 +2,9 @@ package shop.sendbox.sendbox.buyer;
 
 import static shop.sendbox.sendbox.buyer.BuyerStatus.*;
 import static shop.sendbox.sendbox.buyer.DeleteStatus.*;
-import static shop.sendbox.sendbox.util.HashingEncrypt.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,8 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /*
 @Entity 을 추가하면 JPA 스캐너에 의해 JPA 엔티티로 인식되며,
@@ -22,10 +24,13 @@ import lombok.NoArgsConstructor;
 @Getter는 클래스내 모든 필드의 get 메소드를 자동으로 만들어줍니다.
 
 @NoArgsConstructor는 기본 생성자를 만들어주며 접근 권한을 access 값으로 설정할 수 있습니다.
+
+@EqualsAndHashCode는 equals와 hashCode 메소드를 자동으로 생성해줍니다.
  */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Buyer {
 	// @Id 필드는 엔티티의 primary key로 매핑합니다.
 	// @GeneratedValue는 자동으로 증가하는 값에 대한 옵션을 지정할 수 있습니다
@@ -52,8 +57,9 @@ public class Buyer {
 	@Builder가 있는 생성자 필드로 빌더 패턴이 적용됩니다.
 	 */
 	@Builder
-	private Buyer(String email, String password, String salt, String name, String phoneNumber, LocalDateTime createdAt,
-		String createdBy, DeleteStatus deleteYN, BuyerStatus buyerStatus, Long addressId) {
+	private Buyer(final String email, final String password, final String salt, final String name,
+		final String phoneNumber, final LocalDateTime createdAt, final String createdBy, final DeleteStatus deleteYN,
+		final BuyerStatus buyerStatus, final Long addressId) {
 		this.email = email;
 		this.password = password;
 		this.salt = salt;
@@ -68,13 +74,11 @@ public class Buyer {
 		this.deleteYN = deleteYN;
 	}
 
-	public static Buyer create(String email, String password, String name, String phoneNumber,
-		LocalDateTime createdAt,
-		String createdBy) {
-		final String salt = generateSalt();
+	public static Buyer create(final String email, final String password, final String salt, final String name,
+		final String phoneNumber, final LocalDateTime createdAt, final String createdBy) {
 		return Buyer.builder()
 			.email(email)
-			.password(encrypt(password, salt))
+			.password(password)
 			.salt(salt)
 			.name(name)
 			.phoneNumber(phoneNumber)
@@ -91,10 +95,7 @@ public class Buyer {
 	 * 예외를 던지면 if, else를 작성하지 않고 통과한 이후 로직만 작성하면 되니까 코드가 깔끔해진다고 생각합니다.
 	 * 멘토님이시라면 어떻게 하실지 궁금합니다.
 	 */
-	public void validatePassword(String password) {
-		final boolean isMatched = this.password.equals(encrypt(password, this.salt));
-		if (!isMatched) {
-			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-		}
+	public boolean isPasswordEquals(final String password) {
+		return Objects.equals(this.password, password);
 	}
 }
