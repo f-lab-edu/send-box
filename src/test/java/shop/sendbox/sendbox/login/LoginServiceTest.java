@@ -5,19 +5,18 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 
 import org.assertj.core.api.Assertions;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
-import shop.sendbox.sendbox.buyer.Buyer;
-import shop.sendbox.sendbox.buyer.BuyerRepository;
-import shop.sendbox.sendbox.buyer.BuyerRequest;
-import shop.sendbox.sendbox.buyer.BuyerService;
+import shop.sendbox.sendbox.buyer.entity.Buyer;
+import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
+import shop.sendbox.sendbox.buyer.service.BuyerRequest;
+import shop.sendbox.sendbox.buyer.service.BuyerService;
+
 
 @ActiveProfiles("test")
 @SpringBootTest

@@ -1,6 +1,6 @@
 package shop.sendbox.sendbox.login;
 
-import shop.sendbox.sendbox.buyer.Buyer;
+import shop.sendbox.sendbox.buyer.entity.Buyer;
 
 public record LoginResponse(
 	Long id,
