@@ -1,4 +1,4 @@
-package shop.sendbox.sendbox.buyer;
+package shop.sendbox.sendbox.buyer.service;
 
 import java.time.LocalDateTime;
 
@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
+import shop.sendbox.sendbox.buyer.entity.Buyer;
 
 // 서비스 클래스임을 명시하고, 컴포넌트 스캔에 포함되기 위한 @Component를 가진 메타 애노테이션을 추가했습니다.
 // RequiredArgsConstructor 애노테이션을 사용하여 final 필드를 생성자로 주입받도록 했습니다.

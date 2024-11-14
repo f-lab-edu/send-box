@@ -1,4 +1,4 @@
-package shop.sendbox.sendbox.buyer;
+package shop.sendbox.sendbox.buyer.service;
 
 public record BuyerRequest(
 	String email,

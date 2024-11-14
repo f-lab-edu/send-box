@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import shop.sendbox.sendbox.buyer.entity.BuyerStatus;
+import shop.sendbox.sendbox.buyer.service.BuyerRequest;
+import shop.sendbox.sendbox.buyer.service.BuyerResponse;
+import shop.sendbox.sendbox.buyer.service.BuyerService;
+
 @ActiveProfiles("test")
 @SpringBootTest
 class BuyerServiceTest {

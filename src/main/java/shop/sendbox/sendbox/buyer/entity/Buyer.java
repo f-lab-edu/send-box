@@ -1,7 +1,7 @@
-package shop.sendbox.sendbox.buyer;
+package shop.sendbox.sendbox.buyer.entity;
 
-import static shop.sendbox.sendbox.buyer.BuyerStatus.*;
-import static shop.sendbox.sendbox.buyer.DeleteStatus.*;
+import static shop.sendbox.sendbox.buyer.entity.BuyerStatus.*;
+import static shop.sendbox.sendbox.buyer.entity.DeleteStatus.*;
 import static shop.sendbox.sendbox.util.EncryptUtil.*;
 
 import java.time.LocalDateTime;
@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 public class Buyer {
 	// @Id 필드는 엔티티의 primary key로 매핑합니다.
 	// @GeneratedValue는 자동으로 증가하는 값에 대한 옵션을 지정할 수 있습니다
@@ -40,7 +41,7 @@ public class Buyer {
 	private DeleteStatus deleteYN;
 
 	// 클래스 위가 아닌 이유는 Buyer 엔티티의 BuyerId 필드가 생성자에 포함되지 않기 때문입니다.
-	@Builder
+	@Builder(access = AccessLevel.PRIVATE)
 	private Buyer(String email, String password, String salt, String name, String phoneNumber, LocalDateTime createdAt,
 		String createdBy, DeleteStatus deleteYN, BuyerStatus buyerStatus, Long addressId) {
 		this.email = email;
