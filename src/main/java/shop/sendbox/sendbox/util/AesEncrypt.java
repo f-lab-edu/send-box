@@ -16,8 +16,8 @@ import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
 
 /*
-@Slf4j 애노테이션을 클래스에 붙이면 자동으로 log 객체를 생성합니다.
-log 객체를 직접 생성하지 않고 log 메서드를 사용할 수 있습니다.
+애노테이션 프로세서는 해당 애노테이션을 확인하면 컴파일 시점에 Logger 클래스를 생성합니다.
+따라서 별도의 Logger 객체를 생성할 필요 없이 log 객체를 사용할 수 있습니다.
  */
 @Slf4j
 public class AesEncrypt {
@@ -27,15 +27,14 @@ public class AesEncrypt {
 	 * TODO
 	 * 패스워드와 salt를 어떻게 보관할 것인지 고민입니다.
 	 */
-	private static final String PASSWORD = "password";
-	private static final String SALT = "salt";
 	private static final String DELIMITER = ":";
 	private static final String PBKDF2_WITH_HMAC_SHA256 = "PBKDF2WithHmacSHA256";
 	private static final Base64.Encoder ENCODER = Base64.getEncoder();
 	private static final Base64.Decoder DECODER = Base64.getDecoder();
+	public static final int IV_LENGTH = 16;
 
-	private static SecretKey getKeyFromPassword() {
-		KeySpec keySpec = new PBEKeySpec(PASSWORD.toCharArray(), SALT.getBytes(), 65536, 256);
+	private static SecretKey getKeyFromPassword(final String password, final String salt) {
+		KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
 		try {
 			return new SecretKeySpec(generateSecret(keySpec), "AES");
 		} catch (Exception e) {
@@ -49,13 +48,13 @@ public class AesEncrypt {
 	}
 
 	private static IvParameterSpec generateIv() {
-		byte[] iv = new byte[16];
+		byte[] iv = new byte[IV_LENGTH];
 		new SecureRandom().nextBytes(iv);
 		return new IvParameterSpec(iv);
 	}
 
-	public static String encrypt(String input) {
-		SecretKey key = getKeyFromPassword();
+	public static String encrypt(final String password, final String salt, String input) {
+		SecretKey key = getKeyFromPassword(password, salt);
 		final IvParameterSpec iv = generateIv();
 		try {
 			Cipher cipher = Cipher.getInstance(ALGORITHM);
@@ -67,12 +66,12 @@ public class AesEncrypt {
 		}
 	}
 
-	public static String decrypt(String cipherText) {
+	public static String decrypt(final String password, final String salt, String cipherText) {
 		if (cipherText == null) {
 			throw new IllegalArgumentException("암호화된 문자열에 값이 없습니다.");
 		}
 		final String[] encryptAndIv = cipherText.split(DELIMITER);
-		final SecretKey key = getKeyFromPassword();
+		final SecretKey key = getKeyFromPassword(password, salt);
 		if (cipherText.isEmpty() || encryptAndIv.length != 2) {
 			throw new IllegalArgumentException("암호화된 문자열 양식이 올바르지 않습니다.");
 		}
