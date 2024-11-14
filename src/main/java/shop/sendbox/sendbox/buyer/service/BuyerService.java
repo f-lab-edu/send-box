@@ -1,4 +1,4 @@
-package shop.sendbox.sendbox.buyer;
+package shop.sendbox.sendbox.buyer.service;
 
 import java.time.LocalDateTime;
 
@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import shop.sendbox.sendbox.buyer.entity.Buyer;
+import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
 import shop.sendbox.sendbox.login.LoginHandler;
 import shop.sendbox.sendbox.login.LoginResponse;
 import shop.sendbox.sendbox.login.LoginUser;

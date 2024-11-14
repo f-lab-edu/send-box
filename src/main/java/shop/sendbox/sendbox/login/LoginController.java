@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import shop.sendbox.sendbox.buyer.ApiResponse;
+import shop.sendbox.sendbox.api.ApiResponse;
 
 @RestController
 @RequiredArgsConstructor
