@@ -12,9 +12,10 @@ import shop.sendbox.sendbox.login.LoginHandler;
 import shop.sendbox.sendbox.login.LoginResponse;
 import shop.sendbox.sendbox.login.LoginUser;
 import shop.sendbox.sendbox.login.UserType;
-
-// 서비스 클래스임을 명시하고, 컴포넌트 스캔에 포함되기 위한 @Component를 가진 메타 애노테이션을 추가했습니다.
-// RequiredArgsConstructor 애노테이션을 사용하여 final 필드를 생성자로 주입받도록 했습니다.
+/*
+서비스 클래스임을 명시하고, 컴포넌트 스캔에 포함되기 위한 @Component를 가진 메타 애노테이션을 추가했습니다.
+RequiredArgsConstructor 애노테이션을 사용하여 final 필드를 생성자로 주입받도록 했습니다.
+*/
 @Service
 @RequiredArgsConstructor
 public class BuyerService implements LoginHandler {
@@ -44,9 +45,9 @@ public class BuyerService implements LoginHandler {
 
 	@Override
 	public LoginResponse login(final LoginUser user) {
-		final Buyer findBuyer = buyerRepository.findByEmail(user.email())
+		final Buyer foundBuyer = buyerRepository.findByEmail(user.email())
 			.orElseThrow(() -> new IllegalArgumentException("해당 이메일로 가입된 회원이 없습니다."));
-		findBuyer.validatePassword(user.password());
-		return LoginResponse.of(findBuyer);
+		foundBuyer.validatePassword(user.password());
+		return LoginResponse.of(foundBuyer);
 	}
 }
