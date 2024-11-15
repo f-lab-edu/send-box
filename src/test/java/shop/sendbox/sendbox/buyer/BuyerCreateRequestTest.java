@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import shop.sendbox.sendbox.buyer.controller.BuyerCreateRequest;
+import shop.sendbox.sendbox.buyer.service.BuyerRequest;
+
 class BuyerCreateRequestTest {
 
 	@Test

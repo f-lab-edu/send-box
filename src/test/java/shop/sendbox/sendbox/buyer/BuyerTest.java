@@ -1,12 +1,14 @@
 package shop.sendbox.sendbox.buyer;
 
 import static org.assertj.core.api.Assertions.*;
-import static shop.sendbox.sendbox.buyer.BuyerStatus.*;
+import static shop.sendbox.sendbox.buyer.entity.BuyerStatus.*;
 
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import shop.sendbox.sendbox.buyer.entity.Buyer;
 
 class BuyerTest {
 	/*

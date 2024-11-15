@@ -1,7 +1,7 @@
-package shop.sendbox.sendbox.buyer;
+package shop.sendbox.sendbox.buyer.entity;
 
-import static shop.sendbox.sendbox.buyer.BuyerStatus.*;
-import static shop.sendbox.sendbox.buyer.DeleteStatus.*;
+import static shop.sendbox.sendbox.buyer.entity.BuyerStatus.*;
+import static shop.sendbox.sendbox.buyer.entity.DeleteStatus.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -56,7 +55,7 @@ public class Buyer {
 	별도의 생성자에 빌더 어노테이션을 사용했습니다.
 	@Builder가 있는 생성자 필드로 빌더 패턴이 적용됩니다.
 	 */
-	@Builder
+	@Builder(access = AccessLevel.PRIVATE)
 	private Buyer(final String email, final String password, final String salt, final String name,
 		final String phoneNumber, final LocalDateTime createdAt, final String createdBy, final DeleteStatus deleteYN,
 		final BuyerStatus buyerStatus, final Long addressId) {

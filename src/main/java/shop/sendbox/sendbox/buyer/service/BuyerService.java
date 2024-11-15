@@ -1,4 +1,4 @@
-package shop.sendbox.sendbox.buyer;
+package shop.sendbox.sendbox.buyer.service;
 
 import static shop.sendbox.sendbox.util.HashingEncrypt.*;
 
@@ -9,14 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import shop.sendbox.sendbox.buyer.entity.Buyer;
+import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
 import shop.sendbox.sendbox.login.LoginHandler;
 import shop.sendbox.sendbox.login.LoginResponse;
 import shop.sendbox.sendbox.login.LoginUser;
 import shop.sendbox.sendbox.login.UserType;
+import shop.sendbox.sendbox.util.CryptoConfig;
 import shop.sendbox.sendbox.util.HashingEncrypt;
+import shop.sendbox.sendbox.util.SymmetricCryptoService;
 
-// 서비스 클래스임을 명시하고, 컴포넌트 스캔에 포함되기 위한 @Component를 가진 메타 애노테이션을 추가했습니다.
-// RequiredArgsConstructor 애노테이션을 사용하여 final 필드를 생성자로 주입받도록 했습니다.
+/*
+서비스 클래스임을 명시하고, 컴포넌트 스캔에 포함되기 위한 @Component를 가진 메타 애노테이션을 추가했습니다.
+RequiredArgsConstructor 애노테이션을 사용하여 final 필드를 생성자로 주입받도록 했습니다.
+*/
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,6 +30,7 @@ public class BuyerService implements LoginHandler {
 
 	private final BuyerRepository buyerRepository;
 	private final SymmetricCryptoService symmetricCryptoService;
+	private final CryptoConfig cryptoConfig;
 
 	/*
 	@Transactional 애노테이션은 메서드가 실행될 때 트랜잭션을 시작합니다.
@@ -33,14 +40,23 @@ public class BuyerService implements LoginHandler {
 	 */
 	@Transactional
 	public BuyerResponse signUp(final BuyerRequest buyerRequest, final LocalDateTime createdAt) {
-		final String encryptEmail = symmetricCryptoService.encrypt(buyerRequest.email());
+		final String encryptEmail = symmetricCryptoService.encrypt(cryptoConfig.getPassword(), cryptoConfig.getSalt(),
+			buyerRequest.email());
+		final String encryptPhoneNumber = symmetricCryptoService.encrypt(cryptoConfig.getPassword(),
+			cryptoConfig.getSalt(),
+			buyerRequest.phoneNumber());
 		final String salt = generateSalt();
 		final String encryptPassword = encryptPassword(buyerRequest.password(), salt);
-		log.info("encryptEmail: {}", encryptEmail);
 		final Buyer buyer = Buyer.create(encryptEmail, encryptPassword, salt, buyerRequest.name(),
-			buyerRequest.phoneNumber(), createdAt, buyerRequest.createdBy());
+			encryptPhoneNumber, createdAt, buyerRequest.createdBy());
 		final Buyer savedBuyer = buyerRepository.save(buyer);
-		return BuyerResponse.of(savedBuyer, buyerRequest.email(), buyerRequest.phoneNumber());
+
+		final String decryptedEmail = symmetricCryptoService.decrypt(cryptoConfig.getPassword(), cryptoConfig.getSalt(),
+			savedBuyer.getEmail());
+		final String decryptedPhoneNumber = symmetricCryptoService.decrypt(cryptoConfig.getPassword(),
+			cryptoConfig.getSalt(),
+			savedBuyer.getPhoneNumber());
+		return BuyerResponse.of(savedBuyer, decryptedEmail, decryptedPhoneNumber);
 	}
 
 	/*
@@ -56,7 +72,8 @@ public class BuyerService implements LoginHandler {
 	@Override
 	@Transactional(readOnly = true)
 	public LoginResponse login(final LoginUser user) {
-		final String encryptedEmail = symmetricCryptoService.encrypt(user.email());
+		final String encryptedEmail = symmetricCryptoService.encrypt(cryptoConfig.getPassword(), cryptoConfig.getSalt(),
+			user.email());
 		final Buyer findBuyer = buyerRepository.findByEmail(encryptedEmail)
 			.orElseThrow(() -> new IllegalArgumentException("해당 이메일로 가입된 회원이 없습니다."));
 		final String encryptPassword = encryptPassword(user.password(), findBuyer.getSalt());

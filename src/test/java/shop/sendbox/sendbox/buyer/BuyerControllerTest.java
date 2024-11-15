@@ -14,6 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import shop.sendbox.sendbox.buyer.controller.BuyerController;
+import shop.sendbox.sendbox.buyer.controller.BuyerCreateRequest;
+import shop.sendbox.sendbox.buyer.service.BuyerService;
+
 @WebMvcTest(controllers = {
 	BuyerController.class,
 })

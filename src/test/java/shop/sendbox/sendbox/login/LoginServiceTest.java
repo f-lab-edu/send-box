@@ -12,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import shop.sendbox.sendbox.buyer.Buyer;
-import shop.sendbox.sendbox.buyer.BuyerRepository;
-import shop.sendbox.sendbox.buyer.BuyerRequest;
-import shop.sendbox.sendbox.buyer.BuyerService;
+import shop.sendbox.sendbox.buyer.entity.Buyer;
+import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
+import shop.sendbox.sendbox.buyer.service.BuyerRequest;
+import shop.sendbox.sendbox.buyer.service.BuyerService;
+
 
 @ActiveProfiles("test")
 @SpringBootTest

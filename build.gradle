@@ -40,9 +40,6 @@ dependencies {
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    // Guava (sha-256)
-    implementation 'com.google.guava:guava:33.3.1-jre'
-
 }
 
 tasks.named('test') {

@@ -10,8 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import shop.sendbox.sendbox.buyer.entity.Buyer;
+import shop.sendbox.sendbox.buyer.entity.BuyerStatus;
+import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
+import shop.sendbox.sendbox.buyer.service.BuyerRequest;
+import shop.sendbox.sendbox.buyer.service.BuyerResponse;
+import shop.sendbox.sendbox.buyer.service.BuyerService;
 import shop.sendbox.sendbox.login.LoginUser;
 import shop.sendbox.sendbox.login.UserType;
+import shop.sendbox.sendbox.util.SymmetricCryptoService;
 
 @ActiveProfiles("test")
 @SpringBootTest

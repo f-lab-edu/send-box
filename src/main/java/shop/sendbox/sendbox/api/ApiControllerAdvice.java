@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import shop.sendbox.sendbox.buyer.ApiResponse;
-
 /*
 기본적으로 서버에서 발생한 예외는 모두 500 에러로 처리됩니다.
 하지만 클라이언트가 잘못된 요청을 보낸 경우 400 에러로 처리를 해야합니다.
