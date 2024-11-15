@@ -29,7 +29,6 @@ import lombok.ToString;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class Buyer {
 	// @Id 필드는 엔티티의 primary key로 매핑합니다.
 	// @GeneratedValue는 자동으로 증가하는 값에 대한 옵션을 지정할 수 있습니다

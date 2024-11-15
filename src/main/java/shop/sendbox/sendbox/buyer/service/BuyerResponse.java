@@ -9,12 +9,12 @@ import shop.sendbox.sendbox.buyer.entity.BuyerStatus;
 @Builder(access = AccessLevel.PRIVATE)
 public record BuyerResponse(Long buyerId, String email, String name, String phoneNumber, BuyerStatus buyerStatus) {
 
-	public static BuyerResponse of(Buyer buyer, String decryptEmail, String decryptPhoneNumber) {
+	public static BuyerResponse of(Buyer buyer, String decryptedEmail, String decryptedPhoneNumber) {
 		return BuyerResponse.builder()
 			.buyerId(buyer.getBuyerId())
-			.email(decryptEmail)
+			.email(decryptedEmail)
 			.name(buyer.getName())
-			.phoneNumber(decryptPhoneNumber)
+			.phoneNumber(decryptedPhoneNumber)
 			.buyerStatus(buyer.getBuyerStatus())
 			.build();
 	}

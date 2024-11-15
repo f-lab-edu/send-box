@@ -40,15 +40,15 @@ public class BuyerService implements LoginHandler {
 	 */
 	@Transactional
 	public BuyerResponse signUp(final BuyerRequest buyerRequest, final LocalDateTime createdAt) {
-		final String encryptEmail = symmetricCryptoService.encrypt(cryptoConfig.getPassword(), cryptoConfig.getSalt(),
+		final String encryptedEmail = symmetricCryptoService.encrypt(cryptoConfig.getPassword(), cryptoConfig.getSalt(),
 			buyerRequest.email());
-		final String encryptPhoneNumber = symmetricCryptoService.encrypt(cryptoConfig.getPassword(),
+		final String encryptedPhoneNumber = symmetricCryptoService.encrypt(cryptoConfig.getPassword(),
 			cryptoConfig.getSalt(),
 			buyerRequest.phoneNumber());
 		final String salt = generateSalt();
-		final String encryptPassword = encryptPassword(buyerRequest.password(), salt);
-		final Buyer buyer = Buyer.create(encryptEmail, encryptPassword, salt, buyerRequest.name(),
-			encryptPhoneNumber, createdAt, buyerRequest.createdBy());
+		final String encryptedPassword = encryptPassword(buyerRequest.password(), salt);
+		final Buyer buyer = Buyer.create(encryptedEmail, encryptedPassword, salt, buyerRequest.name(),
+			encryptedPhoneNumber, createdAt, buyerRequest.createdBy());
 		final Buyer savedBuyer = buyerRepository.save(buyer);
 
 		final String decryptedEmail = symmetricCryptoService.decrypt(cryptoConfig.getPassword(), cryptoConfig.getSalt(),
@@ -74,15 +74,15 @@ public class BuyerService implements LoginHandler {
 	public LoginResponse login(final LoginUser user) {
 		final String encryptedEmail = symmetricCryptoService.encrypt(cryptoConfig.getPassword(), cryptoConfig.getSalt(),
 			user.email());
-		final Buyer findBuyer = buyerRepository.findByEmail(encryptedEmail)
+		final Buyer foundBuyer = buyerRepository.findByEmail(encryptedEmail)
 			.orElseThrow(() -> new IllegalArgumentException("해당 이메일로 가입된 회원이 없습니다."));
-		final String encryptPassword = encryptPassword(user.password(), findBuyer.getSalt());
-		validatePassword(findBuyer, encryptPassword);
-		return LoginResponse.of(findBuyer, user.email());
+		final String encryptedPassword = encryptPassword(user.password(), foundBuyer.getSalt());
+		validatePassword(foundBuyer, encryptedPassword);
+		return LoginResponse.of(foundBuyer, user.email());
 	}
 
-	private void validatePassword(final Buyer findBuyer, final String encryptPassword) {
-		if (!findBuyer.isPasswordEquals(encryptPassword)) {
+	private void validatePassword(final Buyer buyer, final String encryptedPassword) {
+		if (!buyer.isPasswordEquals(encryptedPassword)) {
 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 		}
 	}
