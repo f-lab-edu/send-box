@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: send-box
+  profiles:
+    default: local
+
+  datasource:
+    url: jdbc:h2:mem:~/send-box
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: none
