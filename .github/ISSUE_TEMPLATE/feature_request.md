@@ -16,5 +16,3 @@ assignees: kamser0415
 - [ ] TODO
 - [ ] TODO
 - [ ] TODO
-
-## 참고할만한 자료(선택)

@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class Buyer {
 	// @Id 필드는 엔티티의 primary key로 매핑합니다.
 	// @GeneratedValue는 자동으로 증가하는 값에 대한 옵션을 지정할 수 있습니다
@@ -40,7 +39,11 @@ public class Buyer {
 	private String updatedBy;
 	private DeleteStatus deleteYN;
 
-	// 클래스 위가 아닌 이유는 Buyer 엔티티의 BuyerId 필드가 생성자에 포함되지 않기 때문입니다.
+	/*
+	모든 필드가 포함된 생성자가 아니라 초기화를 하고 싶은 필드만 포함한 생성자로 빌더를 추가하고 싶어서
+	별도의 생성자에 빌더 어노테이션을 사용했습니다.
+	@Builder가 있는 생성자 필드로 빌더 패턴이 적용됩니다.
+	 */
 	@Builder(access = AccessLevel.PRIVATE)
 	private Buyer(String email, String password, String salt, String name, String phoneNumber, LocalDateTime createdAt,
 		String createdBy, DeleteStatus deleteYN, BuyerStatus buyerStatus, Long addressId) {
