@@ -11,7 +11,12 @@ import org.junit.jupiter.api.Test;
 import shop.sendbox.sendbox.buyer.entity.Buyer;
 
 class BuyerTest {
-
+	/*
+	@Test 애노테이션이 붙은 메서드는 테스트 메서드로 인식됩니다.
+	Junit 프레임워크는 @Test 붙은 메서드를 찾아서 실행하며,
+	코드의 특정 부분이 제대로 동작하는지 검증할 수 있습니다.
+	해당 애노테이션이 붙은 메서드는 private이나 static이 아니여야합니다.
+	 */
 	@Test
 	@DisplayName("구매자가 회원가입을 하면 활성화 상태이다.")
 	void create() {

@@ -2,7 +2,7 @@ package shop.sendbox.sendbox.buyer.entity;
 
 import static shop.sendbox.sendbox.buyer.entity.BuyerStatus.*;
 import static shop.sendbox.sendbox.buyer.entity.DeleteStatus.*;
-import static shop.sendbox.sendbox.util.EncryptUtil.*;
+import static shop.sendbox.sendbox.util.HashingEncrypt.*;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// @Entity 어노테이션은 JPA가 관리하는 엔티티 클래스임을 나타냅니다.
+/*
+@Entity 을 추가하면 JPA 스캐너에 의해 JPA 엔티티로 인식되며,
+데이터베이스 테이블과 매핑합니다.
+
+@Getter는 클래스내 모든 필드의 get 메소드를 자동으로 만들어줍니다.
+
+@NoArgsConstructor는 기본 생성자를 만들어주며 접근 권한을 access 값으로 설정할 수 있습니다.
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

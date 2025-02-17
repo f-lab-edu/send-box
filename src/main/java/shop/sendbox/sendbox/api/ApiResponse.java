@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 
-// Getter 으로 Jackson 라이브러리가 JSON 형태로 변환할 수 있도록 한다
 @Getter
 public class ApiResponse<T> {
 

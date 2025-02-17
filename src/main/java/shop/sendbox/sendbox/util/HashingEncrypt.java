@@ -6,8 +6,8 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 
-public class EncryptUtil {
-	static final int saltLength = 16;
+public class HashingEncrypt {
+	static final int SALT_LENGTH = 16;
 
 	public static String encrypt(String input, String salt) {
 		final MessageDigest digest;
@@ -23,7 +23,7 @@ public class EncryptUtil {
 
 	public static String generateSalt() {
 		SecureRandom random = new SecureRandom();
-		byte[] salt = new byte[saltLength];
+		byte[] salt = new byte[SALT_LENGTH];
 		random.nextBytes(salt);
 		return Base64.getEncoder().encodeToString(salt);
 	}
