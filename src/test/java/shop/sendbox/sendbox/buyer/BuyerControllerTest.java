@@ -44,7 +44,7 @@ class BuyerControllerTest {
 
 		// when
 		BuyerCreateRequest buyerCreateRequest =
-			new BuyerCreateRequest(email, password, name, phoneNumber, null, createdBy);
+			new BuyerCreateRequest(email, password, name, phoneNumber, createdBy);
 
 		// when // then
 		mockMvc.perform(post("/buyers")

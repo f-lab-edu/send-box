@@ -18,6 +18,7 @@ import shop.sendbox.sendbox.buyer.service.BuyerResponse;
 import shop.sendbox.sendbox.buyer.service.BuyerService;
 import shop.sendbox.sendbox.login.LoginUser;
 import shop.sendbox.sendbox.login.UserType;
+import shop.sendbox.sendbox.util.SymmetricCryptoService;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -25,6 +26,9 @@ class BuyerServiceTest {
 
 	@Autowired
 	BuyerService buyerService;
+
+	@Autowired
+	SymmetricCryptoService symmetricCryptoService;
 
 	@Autowired
 	BuyerRepository buyerRepository;
@@ -44,7 +48,7 @@ class BuyerServiceTest {
 		final String name = "홍길동";
 		final String phoneNumber = "01012345678";
 		final String createdBy = "admin";
-		BuyerRequest buyerRequest = new BuyerRequest(email, password, name, phoneNumber, null, createdBy);
+		BuyerRequest buyerRequest = new BuyerRequest(email, password, name, phoneNumber, createdBy);
 
 		// when
 		BuyerResponse buyerResponse = buyerService.signUp(buyerRequest, createdAt);
@@ -62,8 +66,7 @@ class BuyerServiceTest {
 		// given
 		String email = "test@gmail.com";
 		String password = "password";
-		Buyer buyer = createBuyer(email, password);
-		buyerRepository.save(buyer);
+		buyerService.signUp(new BuyerRequest(email, password, "홍길동", "01012345678", "admin"), LocalDateTime.now());
 
 		// when & then
 		Assertions.assertThatCode(() -> buyerService.login(new LoginUser(email, password)))
@@ -74,11 +77,14 @@ class BuyerServiceTest {
 	@DisplayName("구매자는 아이디와 비밀번호가 일치하지 않는 경우 예외를 발생시킨다.")
 	void matchPasswordWithFail() {
 		// given
-		String email = "test@gmail.com";
-		String password = "password";
-		String failPassword = "failPassword";
-		Buyer buyer = createBuyer(email, password);
-		buyerRepository.save(buyer);
+		final String email = "test@gmail.com";
+		final String password = "password";
+		final String failPassword = "failPassword";
+		final LocalDateTime now = LocalDateTime.of(2024, 10, 22, 11, 28);
+		final BuyerResponse buyerResponse = buyerService.signUp(
+			new BuyerRequest(email, password, "홍길동", "01012345678", "admin"), now);
+
+		System.out.println("buyerResponse = " + buyerResponse);
 
 		// when & then
 		Assertions.assertThatThrownBy(() -> buyerService.login(new LoginUser(email, failPassword)))
@@ -112,12 +118,12 @@ class BuyerServiceTest {
 		Assertions.assertThat(result).isFalse();
 	}
 
-
 	private Buyer createBuyer(String email, String password) {
 		String name = "홍길동";
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
+		final String salt = "salt";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		return Buyer.create(email, password, name, phoneNumber, createdAt, createdBy);
+		return Buyer.create(email, password, salt, name, phoneNumber, createdAt, createdBy);
 	}
 }

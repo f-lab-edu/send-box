@@ -3,9 +3,14 @@ package shop.sendbox.sendbox.util;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-
+@SpringBootTest
 class AesEncryptTest {
+
+	@Autowired
+	SymmetricCryptoService symmetricCryptoService;
 
 	@Test
 	@DisplayName("올바른 값을 입력시 암호화 복호화가 정상동작 합니다.")
@@ -14,13 +19,29 @@ class AesEncryptTest {
 		String input = "test";
 		final String password = "AesEncrypt.PASSWORD";
 		final String salt = "AesEncrypt.SALT";
-		String encrypted = AesEncrypt.encrypt(password, salt, input);
+		String encrypted = symmetricCryptoService.encrypt(password, salt, input);
 
 		// when
-		String decrypted = AesEncrypt.decrypt(password, salt, encrypted);
+		final String decrypted = symmetricCryptoService.decrypt(password, salt, encrypted);
 
 		// then
 		Assertions.assertThat(decrypted).isEqualTo(input);
+	}
+
+	@Test
+	@DisplayName("올바른 값을 입력시 암호화 복호화가 정상동작 합니다.")
+	void encryptTestWith() {
+		// given
+		final String input = "test";
+		final String password = "AesEncrypt.PASSWORD";
+		final String salt = "AesEncrypt.SALT";
+
+		// when
+		final String encrypted1 = symmetricCryptoService.encrypt(password, salt, input);
+		final String encrypted2 = symmetricCryptoService.encrypt(password, salt, input);
+
+		// then
+		Assertions.assertThat(encrypted1).isEqualTo(encrypted2);
 	}
 
 	@Test
@@ -32,7 +53,7 @@ class AesEncryptTest {
 		final String salt = "AesEncrypt.SALT";
 
 		// when & then
-		Assertions.assertThatThrownBy(() -> AesEncrypt.decrypt(password, salt, encrypted))
+		Assertions.assertThatThrownBy(() -> symmetricCryptoService.decrypt(password, salt, encrypted))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessage("암호화된 문자열에 값이 없습니다.");
 	}
@@ -46,8 +67,8 @@ class AesEncryptTest {
 		final String salt = "AesEncrypt.SALT";
 
 		// when & then
-		Assertions.assertThatThrownBy(() -> AesEncrypt.decrypt(password, salt, encrypted))
+		Assertions.assertThatThrownBy(() -> symmetricCryptoService.decrypt(password, salt, encrypted))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("암호화된 문자열 양식이 올바르지 않습니다.");
+			.hasMessage("암호화된 문자열이 올바르지 않습니다.");
 	}
 }

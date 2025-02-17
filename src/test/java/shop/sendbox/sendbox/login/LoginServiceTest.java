@@ -42,7 +42,7 @@ class LoginServiceTest {
 		// given
 		String email = "test@gmail.com";
 		String password = "password";
-		BuyerRequest buyerRequest = new BuyerRequest(email, password, "홍길동", "01012345678", null, "admin");
+		BuyerRequest buyerRequest = new BuyerRequest(email, password, "홍길동", "01012345678", "admin");
 		buyerService.signUp(buyerRequest, LocalDateTime.of(2024, 10, 22, 11, 28));
 
 		UserType userType = UserType.BUYER;
@@ -54,6 +54,25 @@ class LoginServiceTest {
 		// then
 		assertThat(loginResponse.email()).isEqualTo(email);
 		assertThat(loginResponse.name()).isEqualTo("홍길동");
+	}
+
+	@Test
+	@DisplayName("회원 가입된 구매자는 틀린 비밀번호를 입력하면 로그인할 수 없다.")
+	void loginBuyerWithFailLoin() {
+		// given
+		String email = "test@gmail.com";
+		String password = "password";
+		String failPassword = "fail_password";
+		BuyerRequest buyerRequest = new BuyerRequest(email, password, "홍길동", "01012345678", "admin");
+		buyerService.signUp(buyerRequest, LocalDateTime.of(2024, 10, 22, 11, 28));
+
+		UserType userType = UserType.BUYER;
+		LoginRequest loginRequest = new LoginRequest(email, failPassword, userType);
+
+		// when
+		Assertions.assertThatThrownBy(() -> loginService.login(loginRequest))
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("비밀번호가 일치하지 않습니다.");
 	}
 
 	@Test
@@ -77,6 +96,6 @@ class LoginServiceTest {
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		return Buyer.create(email, password, name, phoneNumber, createdAt, createdBy);
+		return Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
 	}
 }

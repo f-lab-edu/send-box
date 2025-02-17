@@ -1,10 +1,10 @@
 package shop.sendbox.sendbox.buyer;
 
+import static org.assertj.core.api.Assertions.*;
 import static shop.sendbox.sendbox.buyer.entity.BuyerStatus.*;
 
 import java.time.LocalDateTime;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,13 +26,14 @@ class BuyerTest {
 		String name = "홍길동";
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
+		final String salt = "salt";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
 
 		// when
-		Buyer buyer = Buyer.create(email, password, name, phoneNumber, createdAt, createdBy);
+		Buyer buyer = Buyer.create(email, password, salt, name, phoneNumber, createdAt, createdBy);
 
 		// then
-		Assertions.assertThat(buyer.getBuyerStatus()).isEqualTo(ACTIVE);
+		assertThat(buyer.getBuyerStatus()).isEqualTo(ACTIVE);
 	}
 
 	@Test
@@ -47,11 +48,11 @@ class BuyerTest {
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
 
 		// when
-		Buyer buyer = Buyer.create(email, password, name, phoneNumber, createdAt, createdBy);
+		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
 
 		// then
-		Assertions.assertThat(buyer.getCreatedAt()).isEqualTo(createdAt);
-		Assertions.assertThat(buyer.getUpdatedAt()).isEqualTo(createdAt);
+		assertThat(buyer.getCreatedAt()).isEqualTo(createdAt);
+		assertThat(buyer.getUpdatedAt()).isEqualTo(createdAt);
 	}
 
 	@Test
@@ -64,14 +65,14 @@ class BuyerTest {
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		Buyer buyer = Buyer.create(email, password, name, phoneNumber, createdAt, createdBy);
+		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
 
 		// when & then
-		Assertions.assertThatCode(() -> buyer.validatePassword(password)).doesNotThrowAnyException();
+		assertThat(buyer.isPasswordEquals(password)).isTrue();
 	}
 
 	@Test
-	@DisplayName("구매자는 비밀번호 확인을 통해 비밀번호를 일치하지 않으면 오류가 발생한다")
+	@DisplayName("구매자는 비밀번호 확인을 통해 비밀번호를 일치하지 않으면 false를 반환한다.")
 	void matchPasswordWithFail() {
 		// given
 		String email = "test@gmail.com";
@@ -80,13 +81,10 @@ class BuyerTest {
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		Buyer buyer = Buyer.create(email, password, name, phoneNumber, createdAt, createdBy);
+		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
 		String failPassword = "luma";
 
 		// when & then
-		Assertions.assertThatThrownBy(() -> buyer.validatePassword(failPassword))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("비밀번호가 일치하지 않습니다.");
-
+		assertThat(buyer.isPasswordEquals(failPassword)).isFalse();
 	}
 }

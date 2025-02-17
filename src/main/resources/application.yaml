@@ -13,3 +13,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+symmetric:
+  crypto:
+    password: "1234567890123456"
+    salt: "1234567890123456"

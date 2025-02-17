@@ -1,7 +1,6 @@
 package shop.sendbox.sendbox.util;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
@@ -13,6 +12,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.stereotype.Component;
+
 import lombok.extern.slf4j.Slf4j;
 
 /*
@@ -20,13 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 따라서 별도의 Logger 객체를 생성할 필요 없이 log 객체를 사용할 수 있습니다.
  */
 @Slf4j
-public class AesEncrypt {
+@Component
+public class AesEncrypt implements SymmetricCryptoService {
 
 	private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
-	/**
-	 * TODO
-	 * 패스워드와 salt를 어떻게 보관할 것인지 고민입니다.
-	 */
 	private static final String DELIMITER = ":";
 	private static final String PBKDF2_WITH_HMAC_SHA256 = "PBKDF2WithHmacSHA256";
 	private static final Base64.Encoder ENCODER = Base64.getEncoder();
@@ -49,45 +47,49 @@ public class AesEncrypt {
 
 	private static IvParameterSpec generateIv() {
 		byte[] iv = new byte[IV_LENGTH];
-		new SecureRandom().nextBytes(iv);
 		return new IvParameterSpec(iv);
 	}
 
-	public static String encrypt(final String password, final String salt, String input) {
+	@Override
+	public String encrypt(final String password, final String salt, final String input) {
 		SecretKey key = getKeyFromPassword(password, salt);
 		final IvParameterSpec iv = generateIv();
 		try {
 			Cipher cipher = Cipher.getInstance(ALGORITHM);
-			cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+			cipher.init(Cipher.ENCRYPT_MODE, key, iv); // 고정 IV로 초기화
+
 			byte[] cipherText = cipher.doFinal(input.getBytes());
-			return ENCODER.encodeToString(cipherText) + DELIMITER + ENCODER.encodeToString(iv.getIV());
+
+			final String ivEncoded = ENCODER.encodeToString(iv.getIV());
+			final String cipherTextEncoded = ENCODER.encodeToString(cipherText);
+			return cipherTextEncoded + DELIMITER + ivEncoded;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static String decrypt(final String password, final String salt, String cipherText) {
+	@Override
+	public String decrypt(final String password, final String salt, final String cipherText) {
 		if (cipherText == null) {
 			throw new IllegalArgumentException("암호화된 문자열에 값이 없습니다.");
 		}
-		final String[] encryptAndIv = cipherText.split(DELIMITER);
-		final SecretKey key = getKeyFromPassword(password, salt);
-		if (cipherText.isEmpty() || encryptAndIv.length != 2) {
-			throw new IllegalArgumentException("암호화된 문자열 양식이 올바르지 않습니다.");
+		String[] encryptAndIv = cipherText.split(DELIMITER);
+		if (encryptAndIv.length != 2) {
+			throw new IllegalArgumentException("암호화된 문자열이 올바르지 않습니다.");
 		}
-		final int encryptIndex = 0;
-		final int ivIndex = 1;
-		final byte[] encryptBytes = DECODER.decode(encryptAndIv[encryptIndex]);
-		final byte[] ivBytes = DECODER.decode(encryptAndIv[ivIndex]);
-		IvParameterSpec iv = new IvParameterSpec(ivBytes);
+		final SecretKey key = getKeyFromPassword(password, salt);
+		byte[] ivBytes = DECODER.decode(encryptAndIv[1]);
+		byte[] cipherBytes = DECODER.decode(encryptAndIv[0]);
+		final IvParameterSpec iv = new IvParameterSpec(ivBytes);
+
 		try {
-			Cipher cipher = Cipher.getInstance(ALGORITHM);
+			final Cipher cipher = Cipher.getInstance(ALGORITHM);
 			cipher.init(Cipher.DECRYPT_MODE, key, iv);
-			byte[] plainText = cipher.doFinal(encryptBytes);
+
+			byte[] plainText = cipher.doFinal(cipherBytes);
 			return new String(plainText);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-
 }

@@ -23,8 +23,7 @@ public class BuyerController {
 	@PostMapping("/buyers")
 	public ApiResponse<BuyerResponse> signUp(@RequestBody BuyerCreateRequest buyerCreateRequest) {
 		final LocalDateTime now = LocalDateTime.now();
-		BuyerResponse buyerResponse = buyerService.signUp(buyerCreateRequest.toServiceRequest(), now);
-		return ApiResponse.ok(buyerResponse);
+		return ApiResponse.ok(buyerService.signUp(buyerCreateRequest.toServiceRequest(), now));
 	}
 
 }
