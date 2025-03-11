@@ -47,6 +47,7 @@ public class BuyerService implements LoginHandler {
 			buyerRequest.phoneNumber());
 		final String salt = generateSalt();
 		final String encryptedPassword = encryptPassword(buyerRequest.password(), salt);
+		// Buyer 엔티티를 생성하고 저장합니다.
 		final Buyer buyer = Buyer.create(encryptedEmail, encryptedPassword, salt, buyerRequest.name(),
 			encryptedPhoneNumber, createdAt, buyerRequest.createdBy());
 		final Buyer savedBuyer = buyerRepository.save(buyer);
