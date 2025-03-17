@@ -28,7 +28,7 @@ public class Coupon {
 	private Long sellerId;
 	private DeleteStatus deleteYN;
 
-	public Coupon() {
+	protected Coupon() {
 	}
 
 	@Builder(access = AccessLevel.PRIVATE)
@@ -48,30 +48,13 @@ public class Coupon {
 		this.deleteYN = deleteYN;
 	}
 
-	private Coupon(final Long id, final String code, final BigDecimal discountAmount, final LocalDateTime startDateTime,
-		final LocalDateTime endDateTime, final LocalDateTime createdAt, final LocalDateTime updatedAt,
-		final String createdBy,
-		final String updatedBy, final Long sellerId, final DeleteStatus deleteYN) {
-		this.id = id;
-		this.code = code;
-		this.discountAmount = discountAmount;
-		this.startDateTime = startDateTime;
-		this.endDateTime = endDateTime;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.createdBy = createdBy;
-		this.updatedBy = updatedBy;
-		this.sellerId = sellerId;
-		this.deleteYN = deleteYN;
-	}
-
 	public static Coupon create(final String code, final BigDecimal discountAmount, final LocalDateTime startDateTime,
 		final LocalDateTime endDateTime, final LocalDateTime createdAt, final String createdBy, final Long sellerId) {
-		if (!startDateTime.isAfter(createdAt)) {
-			throw new IllegalArgumentException("이용기간 시작일은 등록일보다 커야 합니다.");
+		if (startDateTime.isBefore(createdAt)) {
+			throw new IllegalArgumentException("이용기간 시작일은 생성일보다 커야 합니다.");
 		}
 
-		if (!endDateTime.isAfter(startDateTime)) {
+		if (endDateTime.isBefore(startDateTime)) {
 			throw new IllegalArgumentException("이용기간 종료일은 시작일보다 커야 합니다.");
 		}
 

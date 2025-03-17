@@ -22,7 +22,7 @@ class CouponServiceTest {
 	private BuyerRepository buyerRepository;
 
 	@Test
-	@DisplayName("쿠폰을 등록할때 판매자 정보가 없는 경우 예외가 발생한다.")
+	@DisplayName("쿠폰을 등록할때 판매자 정보가 없는 경우 오류가 발생한다.")
 	void registerCoupon() {
 		// given
 		LocalDateTime startDateTime = LocalDateTime.of(2025, 1, 1, 1, 1);

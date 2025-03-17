@@ -10,12 +10,33 @@ import org.junit.jupiter.api.Test;
 class CouponTest {
 
 	@Test
+	@DisplayName("쿠폰은 생성시 할인금액을 가진다.")
+	void couponHasDiscountAmount() {
+		// given
+		BigDecimal discountAmount = BigDecimal.valueOf(5000);
+		LocalDateTime startDateTime = LocalDateTime.of(2025, 4, 1, 0, 1);
+		LocalDateTime endDateTime = LocalDateTime.of(2025, 12, 31, 23, 59);
+		LocalDateTime createdAt = LocalDateTime.of(2025, 4, 1, 0, 0);
+
+		// when
+		Coupon coupon = Coupon.create("new", discountAmount, startDateTime, endDateTime, createdAt, "system", 1L);
+
+		// then
+		Assertions.assertThat(coupon.getDiscountAmount()).isEqualTo(discountAmount);
+	}
+
+	@Test
 	@DisplayName("쿠폰은 생성시 삭제되지 않은 상태로 생성된다.")
 	void couponIsNotDelete() {
 		// given
+		LocalDateTime startDateTime = LocalDateTime.of(2025, 4, 1, 0, 1);
+		LocalDateTime endDateTime = LocalDateTime.of(2025, 12, 31, 23, 59);
+		LocalDateTime createdAt = LocalDateTime.of(2025, 4, 1, 0, 0);
+
 		// when
-		Coupon coupon = Coupon.create("new", BigDecimal.valueOf(5000), LocalDateTime.now(), LocalDateTime.now(),
-			LocalDateTime.now(), "system", 1L);
+		Coupon coupon = Coupon.create("new", BigDecimal.valueOf(5000), startDateTime, endDateTime,
+			createdAt, "system", 1L);
+
 		// then
 		Assertions.assertThat(coupon.isDeleted()).isFalse();
 	}
@@ -32,7 +53,8 @@ class CouponTest {
 		// when & then
 		Assertions.assertThatThrownBy(
 				() -> Coupon.create("new", discountAmount, startDate, endDate, createAt, "system", 1L))
-			.isInstanceOf(IllegalArgumentException.class);
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("이용기간 시작일은 생성일보다 커야 합니다.");
 	}
 
 	@Test
@@ -47,7 +69,8 @@ class CouponTest {
 		// when & then
 		Assertions.assertThatThrownBy(
 				() -> Coupon.create("new", discountAmount, startDate, endDate, createAt, "system", 1L))
-			.isInstanceOf(IllegalArgumentException.class);
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("이용기간 종료일은 시작일보다 커야 합니다.");
 	}
 }
 

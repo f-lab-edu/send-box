@@ -12,13 +12,10 @@ import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
 public class CouponService {
 
 	private final CouponRepository couponRepository;
-	private final CouponCodeGenerator couponCodeGenerator;
 	private final BuyerRepository buyerRepository;
 
-	public CouponService(CouponRepository couponRepository, CouponCodeGenerator couponCodeGenerator,
-		BuyerRepository buyerRepository) {
+	public CouponService(CouponRepository couponRepository, BuyerRepository buyerRepository) {
 		this.couponRepository = couponRepository;
-		this.couponCodeGenerator = couponCodeGenerator;
 		this.buyerRepository = buyerRepository;
 	}
 
@@ -26,9 +23,9 @@ public class CouponService {
 	public CouponRegisterResponse registerCoupon(CouponRegisterRequest couponRegisterRequest) {
 		Coupon coupon = createCouponAt(couponRegisterRequest);
 
-		couponRepository.save(coupon);
+		Coupon savedCoupon = couponRepository.save(coupon);
 
-		return CouponRegisterResponse.from(coupon);
+		return CouponRegisterResponse.from(savedCoupon);
 	}
 
 	private Coupon createCouponAt(CouponRegisterRequest couponRegisterRequest) {
@@ -38,8 +35,7 @@ public class CouponService {
 		LocalDateTime startDateTime = couponRegisterRequest.startDateTime();
 		LocalDateTime endDateTime = couponRegisterRequest.endDateTime();
 		LocalDateTime createAt = couponRegisterRequest.createdAt();
-
-		String code = couponCodeGenerator.generateCode(couponType);
+		String code = couponType.generateCode();
 
 		Buyer buyer = buyerRepository.findById(sellerId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
