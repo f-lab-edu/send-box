@@ -4,6 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import shop.sendbox.sendbox.coupon.entity.CouponType;
+
 class CouponNumberGeneratorTest {
 
 	@Test
@@ -18,5 +20,5 @@ class CouponNumberGeneratorTest {
 		// then
 		Assertions.assertThat(code).isEqualTo("WELCOME");
 	}
-	
+
 }

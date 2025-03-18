@@ -1,4 +1,4 @@
-package shop.sendbox.sendbox.coupon;
+package shop.sendbox.sendbox.coupon.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import shop.sendbox.sendbox.buyer.entity.Buyer;
 import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
+import shop.sendbox.sendbox.coupon.entity.Coupon;
+import shop.sendbox.sendbox.coupon.entity.CouponType;
+import shop.sendbox.sendbox.coupon.repository.CouponRepository;
 
 @Service
 public class CouponService {

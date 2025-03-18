@@ -1,6 +1,8 @@
-package shop.sendbox.sendbox.coupon;
+package shop.sendbox.sendbox.coupon.entity;
 
 import java.util.UUID;
+
+import shop.sendbox.sendbox.coupon.service.CouponCodeGenerator;
 
 public enum CouponType implements CouponCodeGenerator {
 	WELCOME("신규 가입 축하 쿠폰") {
@@ -26,5 +28,5 @@ public enum CouponType implements CouponCodeGenerator {
 	CouponType(String description) {
 		this.description = description;
 	}
-	
+
 }

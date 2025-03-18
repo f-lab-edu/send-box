@@ -1,7 +1,9 @@
-package shop.sendbox.sendbox.coupon;
+package shop.sendbox.sendbox.coupon.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import shop.sendbox.sendbox.coupon.entity.Coupon;
 
 public record CouponRegisterResponse(BigDecimal discountAmount, LocalDateTime startDateTime, LocalDateTime endDateTime,
 									 Long sellerId, String code, LocalDateTime createdAt, String createdBy) {

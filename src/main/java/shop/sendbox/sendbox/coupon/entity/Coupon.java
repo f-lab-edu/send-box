@@ -1,4 +1,4 @@
-package shop.sendbox.sendbox.coupon;
+package shop.sendbox.sendbox.coupon.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

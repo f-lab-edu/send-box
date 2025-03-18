@@ -57,5 +57,4 @@ class BuyerControllerTest {
 			.andExpect(jsonPath("$.status").value("OK"))
 			.andExpect(jsonPath("$.message").value("OK"));
 	}
-
 }

@@ -11,6 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import shop.sendbox.sendbox.buyer.entity.Buyer;
 import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
+import shop.sendbox.sendbox.coupon.entity.CouponType;
+import shop.sendbox.sendbox.coupon.service.CouponRegisterRequest;
+import shop.sendbox.sendbox.coupon.service.CouponRegisterResponse;
+import shop.sendbox.sendbox.coupon.service.CouponService;
 
 @SpringBootTest
 class CouponServiceTest {
