@@ -45,7 +45,7 @@ class BuyerResponseTest {
 		String phoneNumber = "01012345678";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
 		String createdBy = "admin";
-		final Buyer buyer = Buyer.create(email, password, salt, name, phoneNumber, createdAt, createdBy);
+		final Buyer buyer = Buyer.create(email, password, salt, name, phoneNumber);
 
 		// when
 		BuyerResponse buyerResponse = BuyerResponse.of(buyer, email, phoneNumber);

@@ -124,6 +124,6 @@ class BuyerServiceTest {
 		String createdBy = "admin";
 		final String salt = "salt";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		return Buyer.create(email, password, salt, name, phoneNumber, createdAt, createdBy);
+		return Buyer.create(email, password, salt, name, phoneNumber);
 	}
 }

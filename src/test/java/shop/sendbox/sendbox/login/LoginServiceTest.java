@@ -17,7 +17,6 @@ import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
 import shop.sendbox.sendbox.buyer.service.BuyerRequest;
 import shop.sendbox.sendbox.buyer.service.BuyerService;
 
-
 @ActiveProfiles("test")
 @SpringBootTest
 class LoginServiceTest {
@@ -96,6 +95,6 @@ class LoginServiceTest {
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		return Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
+		return Buyer.create(email, password, "", name, phoneNumber);
 	}
 }
