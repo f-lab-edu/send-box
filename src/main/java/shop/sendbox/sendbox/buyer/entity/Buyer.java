@@ -1,9 +1,8 @@
 package shop.sendbox.sendbox.buyer.entity;
 
 import static shop.sendbox.sendbox.buyer.entity.BuyerStatus.*;
-import static shop.sendbox.sendbox.buyer.entity.DeleteStatus.*;
+import static shop.sendbox.sendbox.buyer.entity.YnCode.*;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -14,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import shop.sendbox.sendbox.base.BasePersonEntity;
 
 /*
 @Entity 을 추가하면 JPA 스캐너에 의해 JPA 엔티티로 인식되며,
@@ -29,7 +28,7 @@ import lombok.ToString;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Buyer {
+public class Buyer extends BasePersonEntity {
 	// @Id 필드는 엔티티의 primary key로 매핑합니다.
 	// @GeneratedValue는 자동으로 증가하는 값에 대한 옵션을 지정할 수 있습니다
 	// GenerationType.IDENTITY는 데이터베이스가 자동으로 증가하는 방식인 AUTO_INCREMENT를 사용합니다.
@@ -43,11 +42,7 @@ public class Buyer {
 	private String phoneNumber;
 	private Long addressId;
 	private BuyerStatus buyerStatus;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
-	private String createdBy;
-	private String updatedBy;
-	private DeleteStatus deleteYN;
+	private YnCode deleteYN;
 
 	/*
 	모든 필드가 포함된 생성자가 아니라 초기화를 하고 싶은 필드만 포함한 생성자로 빌더를 추가하고 싶어서
@@ -56,7 +51,7 @@ public class Buyer {
 	 */
 	@Builder(access = AccessLevel.PRIVATE)
 	private Buyer(final String email, final String password, final String salt, final String name,
-		final String phoneNumber, final LocalDateTime createdAt, final String createdBy, final DeleteStatus deleteYN,
+		final String phoneNumber, final YnCode deleteYN,
 		final BuyerStatus buyerStatus, final Long addressId) {
 		this.email = email;
 		this.password = password;
@@ -65,23 +60,17 @@ public class Buyer {
 		this.phoneNumber = phoneNumber;
 		this.addressId = addressId;
 		this.buyerStatus = buyerStatus;
-		this.createdAt = createdAt;
-		this.updatedAt = createdAt;
-		this.createdBy = createdBy;
-		this.updatedBy = createdBy;
 		this.deleteYN = deleteYN;
 	}
 
 	public static Buyer create(final String email, final String password, final String salt, final String name,
-		final String phoneNumber, final LocalDateTime createdAt, final String createdBy) {
+		final String phoneNumber) {
 		return Buyer.builder()
 			.email(email)
 			.password(password)
 			.salt(salt)
 			.name(name)
 			.phoneNumber(phoneNumber)
-			.createdAt(createdAt)
-			.createdBy(createdBy)
 			.deleteYN(N)
 			.buyerStatus(ACTIVE)
 			.build();

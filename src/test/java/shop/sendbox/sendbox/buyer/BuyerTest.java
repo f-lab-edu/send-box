@@ -30,29 +30,10 @@ class BuyerTest {
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
 
 		// when
-		Buyer buyer = Buyer.create(email, password, salt, name, phoneNumber, createdAt, createdBy);
+		Buyer buyer = Buyer.create(email, password, salt, name, phoneNumber);
 
 		// then
 		assertThat(buyer.getBuyerStatus()).isEqualTo(ACTIVE);
-	}
-
-	@Test
-	@DisplayName("구매자가 회원가입시 생성일을 등록하며 수정일은 생성일과 동일하다.")
-	void createCreatedAtAndUpdatedAt() {
-		// given
-		String email = "test@gmail.com";
-		String password = "password";
-		String name = "홍길동";
-		String phoneNumber = "01012345678";
-		String createdBy = "admin";
-		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-
-		// when
-		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
-
-		// then
-		assertThat(buyer.getCreatedAt()).isEqualTo(createdAt);
-		assertThat(buyer.getUpdatedAt()).isEqualTo(createdAt);
 	}
 
 	@Test
@@ -65,7 +46,7 @@ class BuyerTest {
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
+		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber);
 
 		// when & then
 		assertThat(buyer.isPasswordEquals(password)).isTrue();
@@ -81,7 +62,7 @@ class BuyerTest {
 		String phoneNumber = "01012345678";
 		String createdBy = "admin";
 		LocalDateTime createdAt = LocalDateTime.of(2024, 10, 22, 11, 28);
-		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber, createdAt, createdBy);
+		Buyer buyer = Buyer.create(email, password, "", name, phoneNumber);
 		String failPassword = "luma";
 
 		// when & then
