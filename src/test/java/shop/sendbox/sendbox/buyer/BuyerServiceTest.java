@@ -3,12 +3,17 @@ package shop.sendbox.sendbox.buyer;
 import java.time.LocalDateTime;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import shop.sendbox.sendbox.buyer.entity.Buyer;
 import shop.sendbox.sendbox.buyer.entity.BuyerStatus;
@@ -16,12 +21,14 @@ import shop.sendbox.sendbox.buyer.repository.BuyerRepository;
 import shop.sendbox.sendbox.buyer.service.BuyerRequest;
 import shop.sendbox.sendbox.buyer.service.BuyerResponse;
 import shop.sendbox.sendbox.buyer.service.BuyerService;
+import shop.sendbox.sendbox.config.TestAuditorConfig;
 import shop.sendbox.sendbox.login.LoginUser;
 import shop.sendbox.sendbox.login.UserType;
-import shop.sendbox.sendbox.util.SymmetricCryptoService;
+import shop.sendbox.sendbox.security.crypto.symmetric.SymmetricCryptoService;
 
 @ActiveProfiles("test")
 @SpringBootTest
+@Import(TestAuditorConfig.class)
 class BuyerServiceTest {
 
 	@Autowired
@@ -35,7 +42,18 @@ class BuyerServiceTest {
 
 	@BeforeEach
 	void setUp() {
+		// 테스트용 요청 생성 및 헤더 설정
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.addHeader("X-User-Id", "1");
+		ServletRequestAttributes attributes = new ServletRequestAttributes(request);
+		RequestContextHolder.setRequestAttributes(attributes);
 		buyerRepository.deleteAllInBatch();
+	}
+
+	@AfterEach
+	void tearDown() {
+		// 테스트 후 RequestContextHolder 초기화
+		RequestContextHolder.resetRequestAttributes();
 	}
 
 	@Test

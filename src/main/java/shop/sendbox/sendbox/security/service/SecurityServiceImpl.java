@@ -11,28 +11,28 @@ import shop.sendbox.sendbox.security.dto.PasswordData;
 @RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
 
-    private final SymmetricCryptoService symmetricCryptoService;
-    private final HashingService hashingService;
+	private final SymmetricCryptoService symmetricCryptoService;
+	private final HashingService hashingService;
 
-    @Override
-    public String encryptText(String plainText) {
-        return symmetricCryptoService.encrypt(plainText);
-    }
+	@Override
+	public String encryptText(String plainText) {
+		return symmetricCryptoService.encrypt(plainText);
+	}
 
-    @Override
-    public String decryptText(String cipherText) {
-        return symmetricCryptoService.decrypt(cipherText);
-    }
+	@Override
+	public String decryptText(String cipherText) {
+		return symmetricCryptoService.decrypt(cipherText);
+	}
 
-    @Override
-    public PasswordData encryptPassword(String plainPassword) {
-        String salt = hashingService.generateSalt();
-        String hashedPassword = hashingService.hash(plainPassword, salt);
-        return new PasswordData(hashedPassword, salt);
-    }
+	@Override
+	public PasswordData encryptPassword(String plainPassword) {
+		String salt = hashingService.generateSalt();
+		String hashedPassword = hashingService.hash(plainPassword, salt);
+		return new PasswordData(hashedPassword, salt);
+	}
 
-    @Override
-    public boolean verifyPassword(String plainPassword, String hashedPassword, String salt) {
-        return hashingService.verify(plainPassword, hashedPassword, salt);
-    }
+	@Override
+	public boolean verifyPassword(String plainPassword, String hashedPassword, String salt) {
+		return hashingService.verify(plainPassword, hashedPassword, salt);
+	}
 }

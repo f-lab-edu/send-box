@@ -13,4 +13,5 @@ public class JpaConfig {
 	public AuditorAware<Long> auditorProvider() {
 		return new AuditorBaseAwareImpl();
 	}
+
 }

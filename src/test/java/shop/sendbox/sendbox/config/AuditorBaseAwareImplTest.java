@@ -47,20 +47,14 @@ class AuditorBaseAwareImplTest {
 	}
 
 	private static Stream<Arguments> requestHeaderFails() {
-		return Stream.of(
-			Arguments.of("사용자 ID 헤더 없음", null, true),
-			Arguments.of("RequestAttributes가 null", null, false),
-			Arguments.of("사용자 ID 헤더가 빈 문자열", "", true),
-			Arguments.of("사용자 ID 헤더가 숫자가 아님", "not number", true)
-		);
+		return Stream.of(Arguments.of("사용자 ID 헤더 없음", null, true), Arguments.of("RequestAttributes가 null", null, false),
+			Arguments.of("사용자 ID 헤더가 빈 문자열", "", true), Arguments.of("사용자 ID 헤더가 숫자가 아님", "not number", true));
 	}
 
 	@MethodSource("requestHeaderFails")
 	@ParameterizedTest(name = "{0}")
 	@DisplayName("잘못된 요청 정보는 빈 Optional 반환")
-	void shouldReturnEmptyOptionalForInvalidCases(String caseName,
-		Object headerValue,
-		boolean setRequestAttributes) {
+	void shouldReturnEmptyOptionalForInvalidCases(String caseName, Object headerValue, boolean setRequestAttributes) {
 		// given
 		if (setRequestAttributes) {
 			MockHttpServletRequest request = new MockHttpServletRequest();

@@ -1,7 +1,7 @@
 package shop.sendbox.sendbox.buyer.entity;
 
 import static shop.sendbox.sendbox.buyer.entity.BuyerStatus.*;
-import static shop.sendbox.sendbox.buyer.entity.YNCode.*;
+import static shop.sendbox.sendbox.buyer.entity.YnCode.*;
 
 import java.util.Objects;
 
@@ -42,7 +42,7 @@ public class Buyer extends BasePersonEntity {
 	private String phoneNumber;
 	private Long addressId;
 	private BuyerStatus buyerStatus;
-	private YNCode deleteYN;
+	private YnCode deleteYN;
 
 	/*
 	모든 필드가 포함된 생성자가 아니라 초기화를 하고 싶은 필드만 포함한 생성자로 빌더를 추가하고 싶어서
@@ -51,7 +51,7 @@ public class Buyer extends BasePersonEntity {
 	 */
 	@Builder(access = AccessLevel.PRIVATE)
 	private Buyer(final String email, final String password, final String salt, final String name,
-		final String phoneNumber, final YNCode deleteYN,
+		final String phoneNumber, final YnCode deleteYN,
 		final BuyerStatus buyerStatus, final Long addressId) {
 		this.email = email;
 		this.password = password;
