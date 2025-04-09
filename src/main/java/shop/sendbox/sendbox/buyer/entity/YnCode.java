@@ -1,5 +1,5 @@
 package shop.sendbox.sendbox.buyer.entity;
 
-public enum DeleteStatus {
+public enum YnCode {
 	Y, N
 }

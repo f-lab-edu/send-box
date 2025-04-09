@@ -1,16 +1,10 @@
 package shop.sendbox.sendbox.login;
 
-import static shop.sendbox.sendbox.util.AesEncrypt.*;
-
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.RequiredArgsConstructor;
-import shop.sendbox.sendbox.util.AesEncrypt;
-import shop.sendbox.sendbox.util.HashingEncrypt;
 
 /*
 @Service 애노테이션은 해당 클래스가 서비스 로직을 처리하는 주석을 나타내며,

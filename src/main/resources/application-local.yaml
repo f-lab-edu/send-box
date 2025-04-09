@@ -14,3 +14,12 @@ spring:
   h2:
     console:
       enabled: true
+      
+security:
+  symmetric:
+    password: localTestPassword  # 테스트/개발 환경용
+    salt: localTestSalt          # 테스트/개발 환경용
+    algorithm: AES/CBC/PKCS5Padding
+  hashing:
+    algorithm: SHA-256
+    salt-length: 16
