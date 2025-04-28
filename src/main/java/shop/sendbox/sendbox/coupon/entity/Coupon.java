@@ -9,10 +9,12 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import shop.sendbox.sendbox.buyer.entity.DeleteStatus;
+import lombok.NoArgsConstructor;
+import shop.sendbox.sendbox.buyer.entity.YnCode;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Coupon {
 	@Id
 	@GeneratedValue
@@ -26,16 +28,13 @@ public class Coupon {
 	private String createdBy;
 	private String updatedBy;
 	private Long sellerId;
-	private DeleteStatus deleteYN;
-
-	protected Coupon() {
-	}
+	private YnCode deleteYN;
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private Coupon(final String code, final BigDecimal discountAmount, final LocalDateTime startDateTime,
 		final LocalDateTime endDateTime, final LocalDateTime createdAt, final LocalDateTime updatedAt,
 		final String createdBy,
-		final String updatedBy, final Long sellerId, final DeleteStatus deleteYN) {
+		final String updatedBy, final Long sellerId, final YnCode deleteYN) {
 		this.code = code;
 		this.discountAmount = discountAmount;
 		this.startDateTime = startDateTime;
@@ -68,7 +67,7 @@ public class Coupon {
 			.createdBy(createdBy)
 			.updatedBy(createdBy)
 			.sellerId(sellerId)
-			.deleteYN(DeleteStatus.N)
+			.deleteYN(YnCode.N)
 			.build();
 	}
 

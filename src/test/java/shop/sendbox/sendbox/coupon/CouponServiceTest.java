@@ -50,7 +50,7 @@ class CouponServiceTest {
 		CouponRegisterRequest couponRegisterRequest = new CouponRegisterRequest(BigDecimal.valueOf(5000), 1L,
 			startDateTime, endDateTime, CouponType.WELCOME, 1L, createAt);
 		buyerRepository.save(
-			Buyer.create("test@gmail.com", "password", "salt", "test", "010-1234-5678", createAt, "system"));
+			Buyer.create("test@gmail.com", "password", "salt", "test", "010-1234-5678"));
 
 		// when
 		CouponRegisterResponse couponRegisterResponse = couponService.registerCoupon(couponRegisterRequest);

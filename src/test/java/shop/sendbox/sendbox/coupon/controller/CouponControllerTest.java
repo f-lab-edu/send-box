@@ -21,9 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import shop.sendbox.sendbox.coupon.entity.CouponType;
 import shop.sendbox.sendbox.coupon.service.CouponService;
 
-@WebMvcTest(controllers = {
-	CouponController.class,
-})
+@WebMvcTest(controllers = {CouponController.class})
 class CouponControllerTest {
 
 	@Autowired
@@ -43,15 +41,12 @@ class CouponControllerTest {
 		LocalDateTime endDateTime = LocalDateTime.of(2025, 5, 14, 1, 1);
 		LocalDateTime createAt = LocalDateTime.of(2025, 3, 13, 1, 1);
 		CouponCreateRequest couponCreateRequest = new CouponCreateRequest(BigDecimal.valueOf(5000), 1L, startDateTime,
-			endDateTime, CouponType.WELCOME, 1L,
-			createAt);
+			endDateTime, CouponType.WELCOME, 1L, createAt);
 		when(couponService.registerCoupon(any())).thenThrow(new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
 		// when // then
-		mockMvc.perform(post("/coupons")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(couponCreateRequest))
-			)
+		mockMvc.perform(post("/coupons").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(couponCreateRequest)))
 			.andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.statusCode").value(400))
@@ -67,14 +62,11 @@ class CouponControllerTest {
 		LocalDateTime endDateTime = LocalDateTime.of(2025, 5, 14, 1, 1);
 		LocalDateTime createAt = LocalDateTime.of(2025, 3, 13, 1, 1);
 		CouponCreateRequest couponCreateRequest = new CouponCreateRequest(BigDecimal.valueOf(5000), 1L, startDateTime,
-			endDateTime, CouponType.WELCOME, 1L,
-			createAt);
+			endDateTime, CouponType.WELCOME, 1L, createAt);
 
 		// when // then
-		mockMvc.perform(post("/coupons")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(couponCreateRequest))
-			)
+		mockMvc.perform(post("/coupons").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(couponCreateRequest)))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.statusCode").value(200))
