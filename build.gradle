@@ -31,6 +31,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation' // 추가: Bean Validation 의존성
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     // ORM JPA
@@ -96,3 +97,4 @@ jacocoTestCoverageVerification {
         }
     }
 }
+

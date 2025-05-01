@@ -1,6 +1,11 @@
 package shop.sendbox.sendbox.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,7 +29,20 @@ public class ApiControllerAdvice {
 	public ApiResponse<Object> handleIllegalAccessException(IllegalArgumentException error) {
 		return ApiResponse.of(HttpStatus.BAD_REQUEST, error.getMessage(), null);
 	}
-	/*
-	예외가 발생한 원인에 대한 메세지를 클라이언트에게 전달하기 위해 ApiResponse 객체를 생성하여 반환합니다.
+	
+	/**
+	 * Bean Validation 예외 처리
+	 * 유효성 검증에 실패한 필드와 메시지를 응답으로 반환합니다.
 	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ApiResponse<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception) {
+		Map<String, String> errors = new HashMap<>();
+		exception.getBindingResult().getAllErrors().forEach(error -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+		return ApiResponse.of(HttpStatus.BAD_REQUEST, "입력값 검증에 실패했습니다", errors);
+	}
 }
