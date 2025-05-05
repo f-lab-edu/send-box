@@ -1,11 +1,11 @@
-package shop.sendbox.sendbox.security.service;
+package shop.sendbox.sendbox.security.crypto.service;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import shop.sendbox.sendbox.security.crypto.dto.PasswordData;
 import shop.sendbox.sendbox.security.crypto.hashing.HashingService;
 import shop.sendbox.sendbox.security.crypto.symmetric.SymmetricCryptoService;
-import shop.sendbox.sendbox.security.dto.PasswordData;
 
 @Service
 @RequiredArgsConstructor

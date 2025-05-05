@@ -3,35 +3,30 @@ package shop.sendbox.sendbox.api;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-import java.sql.SQLException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.sendbox.sendbox.login.LoginController;
 import shop.sendbox.sendbox.login.LoginCreateRequest;
 import shop.sendbox.sendbox.login.LoginService;
 import shop.sendbox.sendbox.login.UserType;
+import shop.sendbox.sendbox.testsupport.config.TestHolderConfig;
 
 @WebMvcTest(controllers = {
 	LoginController.class
 })
+@Import(TestHolderConfig.class)
 class ApiControllerAdviceTest {
 
 	@Autowired

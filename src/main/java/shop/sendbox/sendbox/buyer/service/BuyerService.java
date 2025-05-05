@@ -12,8 +12,8 @@ import shop.sendbox.sendbox.login.LoginHandler;
 import shop.sendbox.sendbox.login.LoginResponse;
 import shop.sendbox.sendbox.login.LoginUser;
 import shop.sendbox.sendbox.login.UserType;
-import shop.sendbox.sendbox.security.dto.PasswordData;
-import shop.sendbox.sendbox.security.service.SecurityService;
+import shop.sendbox.sendbox.security.crypto.dto.PasswordData;
+import shop.sendbox.sendbox.security.crypto.service.SecurityService;
 
 @Service
 @RequiredArgsConstructor

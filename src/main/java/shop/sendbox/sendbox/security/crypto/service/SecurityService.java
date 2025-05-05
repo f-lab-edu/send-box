@@ -1,6 +1,6 @@
-package shop.sendbox.sendbox.security.service;
+package shop.sendbox.sendbox.security.crypto.service;
 
-import shop.sendbox.sendbox.security.dto.PasswordData;
+import shop.sendbox.sendbox.security.crypto.dto.PasswordData;
 
 public interface SecurityService {
 	String encryptText(String plainText);

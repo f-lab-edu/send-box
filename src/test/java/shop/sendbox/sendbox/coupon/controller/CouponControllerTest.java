@@ -11,8 +11,12 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,8 +24,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.sendbox.sendbox.coupon.entity.CouponType;
 import shop.sendbox.sendbox.coupon.service.CouponService;
+import shop.sendbox.sendbox.testsupport.config.TestHolderConfig;
+import shop.sendbox.sendbox.testsupport.config.TestNoWebMvcConfig;
 
-@WebMvcTest(controllers = {CouponController.class})
+@WebMvcTest(controllers = {
+	CouponController.class}, excludeFilters =
+	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
+		shop.sendbox.sendbox.config.WebMvcConfig.class}))
+@Import({TestHolderConfig.class, TestNoWebMvcConfig.class})
+@AutoConfigureMockMvc(addFilters = false)
 class CouponControllerTest {
 
 	@Autowired
@@ -55,7 +66,7 @@ class CouponControllerTest {
 	}
 
 	@Test
-	@DisplayName("쿠폰을 등록할때 판매자 정보")
+	@DisplayName("쿠폰을 정상적으로 등록한다")
 	void couponRegist() throws Exception {
 		// given
 		LocalDateTime startDateTime = LocalDateTime.of(2025, 3, 14, 1, 1);
