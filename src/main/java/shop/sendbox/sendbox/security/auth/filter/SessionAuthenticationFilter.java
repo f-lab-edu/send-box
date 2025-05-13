@@ -19,6 +19,7 @@ import shop.sendbox.sendbox.security.auth.exception.AuthenticationException;
 @RequiredArgsConstructor
 public class SessionAuthenticationFilter implements Filter {
 
+	public static final String USER_PRINCIPAL = "userPrincipal";
 	private final SecurityPrincipalHolder securityPrincipalHolder;
 
 	@Override
@@ -53,7 +54,7 @@ public class SessionAuthenticationFilter implements Filter {
 			throw new AuthenticationException("로그인이 필요합니다.");
 		}
 
-		Object attr = session.getAttribute("userPrincipal");
+		Object attr = session.getAttribute(USER_PRINCIPAL);
 		if (!(attr instanceof UserPrincipal)) {
 			throw new AuthenticationException("유효한 사용자 정보가 아닙니다.");
 		}

@@ -11,25 +11,25 @@ public class UserPrincipal {
 
 	private final String id;
 	private final UserType userType;
-	private final Set<Permission> permissions;
+	private final Set<Permission> allowsPermission;
 
 	public UserPrincipal(String id, UserType userType) {
 		this.id = id;
 		this.userType = userType;
-		this.permissions = EnumSet.noneOf(Permission.class);
+		this.allowsPermission = EnumSet.noneOf(Permission.class);
 		initPermissions();
 	}
 
 	private void initPermissions() {
 		switch (userType) {
 			case BUYER:
-				permissions.add(Permission.BUYER);
+				allowsPermission.add(Permission.BUYER);
 				break;
 			case SELLER:
-				permissions.add(Permission.SELLER);
+				allowsPermission.add(Permission.SELLER);
 				break;
 			case ADMIN:
-				permissions.addAll(EnumSet.allOf(Permission.class));
+				allowsPermission.addAll(EnumSet.allOf(Permission.class));
 				break;
 		}
 	}
@@ -41,7 +41,7 @@ public class UserPrincipal {
 	public boolean hasPermission(Permission currentPermission) {
 		Assert.notNull(currentPermission, "currentPermission은 필수입니다.");
 
-		if (permissions.contains(currentPermission)) {
+		if (allowsPermission.contains(currentPermission)) {
 			return true;
 		}
 

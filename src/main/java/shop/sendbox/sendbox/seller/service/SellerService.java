@@ -23,13 +23,13 @@ public class SellerService implements LoginHandler {
 	@Transactional
 	public SellerCreateResult createSeller(SellerCreateCommand command) {
 		validateUniqueBusinessNumber(command);
-        validateTaxEmailNotDuplicate(command);
+		validateTaxEmailNotDuplicate(command);
 
 		String encryptedPhoneNumber = securityService.encryptText(command.phoneNumber());
 		String encryptedTaxEmail = securityService.encryptText(command.taxEmail());
 		String encryptedBusinessNumber = securityService.encryptText(command.businessNumber());
 
-        PasswordData passwordData = securityService.encryptPassword(command.password());
+		PasswordData passwordData = securityService.encryptPassword(command.password());
 
 		Seller seller = Seller.create(passwordData.hashedPassword(), passwordData.salt(), command.name(),
 			encryptedBusinessNumber, encryptedPhoneNumber, encryptedTaxEmail);
@@ -51,18 +51,18 @@ public class SellerService implements LoginHandler {
 		}
 	}
 
-    private void validateTaxEmailNotDuplicate(SellerCreateCommand command) {
-        String encryptedTaxEmail = securityService.encryptText(command.taxEmail());
-        if (sellerRepository.existsByTaxEmail(encryptedTaxEmail)) {
-            throw new IllegalArgumentException("이미 등록된 세금 계산서용 이메일입니다.");
-        }
-    }
+	private void validateTaxEmailNotDuplicate(SellerCreateCommand command) {
+		String encryptedTaxEmail = securityService.encryptText(command.taxEmail());
+		if (sellerRepository.existsByTaxEmail(encryptedTaxEmail)) {
+			throw new IllegalArgumentException("이미 등록된 세금 계산서용 이메일입니다.");
+		}
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public LoginResponse login(final LoginUser user) {
-        // 이메일 암호화하여 회원 조회
-        String encryptedEmail = securityService.encryptText(user.email());
+	@Override
+	@Transactional(readOnly = true)
+	public LoginResponse login(final LoginUser user) {
+		// 이메일 암호화하여 회원 조회
+		String encryptedEmail = securityService.encryptText(user.email());
 
 		Seller foundSeller = sellerRepository.findByTaxEmail(encryptedEmail)
 			.orElseThrow(() -> new IllegalArgumentException("해당 이메일로 가입된 판매자가 없습니다."));

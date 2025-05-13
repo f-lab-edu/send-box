@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import shop.sendbox.sendbox.security.auth.exception.AuthenticationException;
 import shop.sendbox.sendbox.security.auth.exception.AuthorizationException;
+import shop.sendbox.sendbox.security.auth.exception.UserPrincipalNotSetException;
+import shop.sendbox.sendbox.security.auth.exception.UserPrincipalRequiredException;
 
 /*
 기본적으로 서버에서 발생한 예외는 모두 500 에러로 처리됩니다.
@@ -55,4 +57,15 @@ public class ApiControllerAdvice {
 		return ErrorResponse.accessDenied();
 	}
 
+	@ExceptionHandler(UserPrincipalNotSetException.class)
+	public ErrorResponse handleUserPrincipalNotSetException() {
+		return ErrorResponse.missingPrincipal();
+	}
+
+	@ExceptionHandler(UserPrincipalRequiredException.class)
+	public ErrorResponse handleUserPrincipalRequiredException() {
+		return ErrorResponse.unauthorized();
+	}
+
 }
+
