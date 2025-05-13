@@ -16,8 +16,4 @@ public record LoginResponse(
 		return new LoginResponse(seller.getId(), seller.getName(), email);
 	}
 
-	// 더 일반적인 팩토리 메서드 추가
-	public static LoginResponse from(Long id, String name, String email) {
-		return new LoginResponse(id, name, email);
-	}
 }

@@ -37,12 +37,12 @@ public class ApiControllerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ApiResponse<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception) {
-		Map<String, String> errors = new HashMap<>();
+		Map<String, String> fieldErrorMap = new HashMap<>();
 		exception.getBindingResult().getAllErrors().forEach(error -> {
 			String fieldName = ((FieldError) error).getField();
 			String errorMessage = error.getDefaultMessage();
-			errors.put(fieldName, errorMessage);
+			fieldErrorMap.put(fieldName, errorMessage);
 		});
-		return ApiResponse.of(HttpStatus.BAD_REQUEST, "입력값 검증에 실패했습니다", errors);
+		return ApiResponse.of(HttpStatus.BAD_REQUEST, "입력값 검증에 실패했습니다", fieldErrorMap);
 	}
 }
