@@ -18,7 +18,7 @@ public class SellerService {
 
 	@Transactional
 	public SellerCreateResult createSeller(SellerCreateCommand command) {
-		validateBusinessNumberNotDuplicate(command);
+		validateUniqueBusinessNumber(command);
 
 		String encryptedPhoneNumber = securityService.encryptText(command.phoneNumber());
 		String encryptedTaxEmail = securityService.encryptText(command.taxEmail());
@@ -39,7 +39,7 @@ public class SellerService {
 		);
 	}
 
-	private void validateBusinessNumberNotDuplicate(SellerCreateCommand command) {
+	private void validateUniqueBusinessNumber(SellerCreateCommand command) {
 		String encryptedBusinessNumber = securityService.encryptText(command.businessNumber());
 		if (sellerRepository.existsByBusinessNumber(encryptedBusinessNumber)) {
 			throw new IllegalArgumentException("이미 등록된 사업자번호입니다.");
