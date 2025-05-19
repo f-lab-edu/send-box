@@ -1,4 +1,5 @@
 name: send-box-ci
+
 on:
   pull_request:
     branches:
@@ -6,20 +7,25 @@ on:
     paths:
       - 'src/**'
     types: [ opened, synchronize ]
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-22.04
-    steps:
-      - name: check Out
-        uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # SonarCloud blame 정보 분석을 위해 전체 커밋 히스토리 필요
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '21'
 
-      - name: cache gradle package
+      - name: Cache Gradle dependencies
         id: cache-gradle
         uses: actions/cache@v4
         with:
@@ -30,10 +36,32 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Grant execute permission for gradlew
+      - name: Grant execute permission to gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
+      - name: Build project and generate JaCoCo report
         run: |
           ./gradlew wrapper
-          ./gradlew clean build
+          ./gradlew clean build jacocoTestReport
+
+      - name: Set SonarCloud Project Key dynamically
+        run: |
+          REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2)
+          ORG_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
+          SONAR_PROJECT_KEY="${ORG_NAME}_${REPO_NAME}"
+          echo "SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITHUB_ENV
+
+      - name: Analyze with SonarCloud
+        uses: SonarSource/sonarqube-scan-action@v5
+        id: analyze-sonarcloud
+        continue-on-error: false
+        env:
+          SONAR_TOKEN: ${{ secrets.SECRET_SONARQUBE }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=f-lab-edu-1
+            -Dsonar.java.binaries=build/classes/java
+            -Dsonar.sources=src/main/java
+            -Dsonar.tests=src/test/java
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
