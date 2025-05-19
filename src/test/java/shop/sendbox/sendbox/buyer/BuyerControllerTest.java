@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -17,10 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import shop.sendbox.sendbox.buyer.controller.BuyerController;
 import shop.sendbox.sendbox.buyer.controller.BuyerCreateRequest;
 import shop.sendbox.sendbox.buyer.service.BuyerService;
+import shop.sendbox.sendbox.testsupport.config.TestHolderConfig;
 
 @WebMvcTest(controllers = {
 	BuyerController.class,
 })
+@Import(TestHolderConfig.class)
 class BuyerControllerTest {
 
 	@Autowired
@@ -57,5 +60,4 @@ class BuyerControllerTest {
 			.andExpect(jsonPath("$.status").value("OK"))
 			.andExpect(jsonPath("$.message").value("OK"));
 	}
-
 }

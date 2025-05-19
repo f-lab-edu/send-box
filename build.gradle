@@ -31,6 +31,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation' // 추가: Bean Validation 의존성
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     // ORM JPA
@@ -47,6 +48,11 @@ tasks.named('test') {
     finalizedBy jacocoTestReport
 }
 
+// `jacocoTestCoverageVerification`을 `check` 태스크에서만 실행되도록 변경
+tasks.named('check') {
+    dependsOn jacocoTestCoverageVerification
+}
+
 //jacoco
 jacoco {
     toolVersion = "0.8.11"
@@ -55,7 +61,6 @@ jacoco {
 
 jacocoTestReport {
     dependsOn test
-    finalizedBy 'jacocoTestCoverageVerification'
 
     reports {
         xml.required = false
@@ -92,3 +97,4 @@ jacocoTestCoverageVerification {
         }
     }
 }
+

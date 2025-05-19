@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import shop.sendbox.sendbox.security.config.SecurityConfig;
+import shop.sendbox.sendbox.security.crypto.config.SecurityConfig;
 
 @SpringBootTest
 @ActiveProfiles("test")

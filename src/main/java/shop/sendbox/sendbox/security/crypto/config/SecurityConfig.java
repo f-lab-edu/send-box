@@ -1,4 +1,4 @@
-package shop.sendbox.sendbox.security.config;
+package shop.sendbox.sendbox.security.crypto.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

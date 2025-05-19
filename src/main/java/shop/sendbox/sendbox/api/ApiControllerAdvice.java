@@ -1,9 +1,19 @@
 package shop.sendbox.sendbox.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import shop.sendbox.sendbox.security.auth.exception.AuthenticationException;
+import shop.sendbox.sendbox.security.auth.exception.AuthorizationException;
+import shop.sendbox.sendbox.security.auth.exception.UserPrincipalNotSetException;
+import shop.sendbox.sendbox.security.auth.exception.UserPrincipalRequiredException;
 
 /*
 기본적으로 서버에서 발생한 예외는 모두 500 에러로 처리됩니다.
@@ -24,7 +34,38 @@ public class ApiControllerAdvice {
 	public ApiResponse<Object> handleIllegalAccessException(IllegalArgumentException error) {
 		return ApiResponse.of(HttpStatus.BAD_REQUEST, error.getMessage(), null);
 	}
-	/*
-	예외가 발생한 원인에 대한 메세지를 클라이언트에게 전달하기 위해 ApiResponse 객체를 생성하여 반환합니다.
-	 */
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ApiResponse<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception) {
+		Map<String, String> fieldErrorMap = new HashMap<>();
+		exception.getBindingResult().getAllErrors().forEach(error -> {
+			String fieldName = ((FieldError)error).getField();
+			String errorMessage = error.getDefaultMessage();
+			fieldErrorMap.put(fieldName, errorMessage);
+		});
+		return ApiResponse.of(HttpStatus.BAD_REQUEST, "입력값 검증에 실패했습니다", fieldErrorMap);
+	}
+
+	@ExceptionHandler(AuthenticationException.class)
+	public ErrorResponse handleAuthenticationException() {
+		return ErrorResponse.unauthorized();
+	}
+
+	@ExceptionHandler(AuthorizationException.class)
+	public ErrorResponse handleAuthorizationException() {
+		return ErrorResponse.accessDenied();
+	}
+
+	@ExceptionHandler(UserPrincipalNotSetException.class)
+	public ErrorResponse handleUserPrincipalNotSetException() {
+		return ErrorResponse.missingPrincipal();
+	}
+
+	@ExceptionHandler(UserPrincipalRequiredException.class)
+	public ErrorResponse handleUserPrincipalRequiredException() {
+		return ErrorResponse.unauthorized();
+	}
+
 }
+

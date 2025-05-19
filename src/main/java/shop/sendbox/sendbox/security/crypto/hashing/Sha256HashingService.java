@@ -8,7 +8,7 @@ import java.util.Base64;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import shop.sendbox.sendbox.security.config.SecurityConfig;
+import shop.sendbox.sendbox.security.crypto.config.SecurityConfig;
 
 @Service
 @RequiredArgsConstructor
