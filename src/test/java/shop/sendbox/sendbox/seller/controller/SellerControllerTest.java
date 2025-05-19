@@ -19,14 +19,14 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import shop.sendbox.sendbox.api.ApiControllerAdvice;
 import shop.sendbox.sendbox.seller.service.SellerCreateCommand;
 import shop.sendbox.sendbox.seller.service.SellerCreateResult;
 import shop.sendbox.sendbox.seller.service.SellerService;
+import shop.sendbox.sendbox.testsupport.config.TestHolderConfig;
+import shop.sendbox.sendbox.testsupport.config.TestNoWebMvcConfig;
 
-@WebMvcTest(SellerController.class)
-@Import(ApiControllerAdvice.class)
-@DisplayName("판매자 컨트롤러 테스트")
+@WebMvcTest(controllers = SellerController.class)
+@Import({TestHolderConfig.class, TestNoWebMvcConfig.class})
 class SellerControllerTest {
 
 	@Autowired

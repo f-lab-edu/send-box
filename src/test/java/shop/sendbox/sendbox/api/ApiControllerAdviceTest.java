@@ -1,37 +1,35 @@
 package shop.sendbox.sendbox.api;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-import java.sql.SQLException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.sendbox.sendbox.login.LoginController;
 import shop.sendbox.sendbox.login.LoginCreateRequest;
 import shop.sendbox.sendbox.login.LoginService;
 import shop.sendbox.sendbox.login.UserType;
+import shop.sendbox.sendbox.security.auth.UserPrincipal;
+import shop.sendbox.sendbox.security.auth.context.SecurityPrincipalHolder;
+import shop.sendbox.sendbox.security.auth.exception.UserPrincipalNotSetException;
+import shop.sendbox.sendbox.security.auth.exception.UserPrincipalRequiredException;
+import shop.sendbox.sendbox.testsupport.config.TestHolderConfig;
 
-@WebMvcTest(controllers = {
-	LoginController.class
-})
+@WebMvcTest(controllers = {LoginController.class})
+@Import(TestHolderConfig.class)
 class ApiControllerAdviceTest {
 
 	@Autowired
@@ -52,13 +50,57 @@ class ApiControllerAdviceTest {
 		Mockito.when(loginService.login(any())).thenThrow(new IllegalArgumentException("비밀번호가 일치하지 않습니다."));
 
 		// when & then
-		mockMvc.perform(
-				MockMvcRequestBuilders.post("/login")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(objectMapper.writeValueAsString(createRequest)))
+		mockMvc.perform(MockMvcRequestBuilders.post("/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(createRequest)))
 			.andDo(print())
 			.andExpect(MockMvcResultMatchers.status().isBadRequest())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.message").isString());
 	}
 
+	@DisplayName("UserPrincipal이 null일 경우 UserPrincipalRequiredException이 발생합니다.")
+	void throwsUserPrincipalRequiredExceptionWhenUserIsNull() {
+		// given
+		SecurityPrincipalHolder holder = new SecurityPrincipalHolder();
+
+		// when & then
+		assertThrows(UserPrincipalRequiredException.class, () -> holder.setContext(null));
+	}
+
+	@DisplayName("UserPrincipal이 설정되지 않은 상태에서 getContext 호출 시 UserPrincipalNotSetException이 발생합니다.")
+	void throwsUserPrincipalNotSetExceptionWhenContextIsNotSet() {
+		// given
+		SecurityPrincipalHolder holder = new SecurityPrincipalHolder();
+
+		// when & then
+		assertThrows(UserPrincipalNotSetException.class, holder::getContext);
+	}
+
+	@DisplayName("UserPrincipal을 설정하고 정상적으로 가져올 수 있습니다.")
+	void successfullySetsAndGetsUserPrincipal() {
+		// given
+		SecurityPrincipalHolder holder = new SecurityPrincipalHolder();
+		UserPrincipal userPrincipal = new UserPrincipal("testUser", UserType.BUYER);
+
+		// when
+		holder.setContext(userPrincipal);
+		UserPrincipal result = holder.getContext();
+
+		// then
+		assertEquals(userPrincipal, result);
+	}
+
+	@DisplayName("clear 호출 후 UserPrincipal이 제거됩니다.")
+	void clearsUserPrincipalSuccessfully() {
+		// given
+		SecurityPrincipalHolder holder = new SecurityPrincipalHolder();
+		UserPrincipal userPrincipal = new UserPrincipal("testUser", UserType.BUYER);
+		holder.setContext(userPrincipal);
+
+		// when
+		holder.clear();
+
+		// then
+		assertThrows(UserPrincipalNotSetException.class, holder::getContext);
+	}
 }
