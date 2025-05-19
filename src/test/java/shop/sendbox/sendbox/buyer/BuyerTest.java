@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import shop.sendbox.sendbox.buyer.entity.Buyer;
 
-class BuyerTest {
+public class BuyerTest {
 	/*
 	@Test 애노테이션이 붙은 메서드는 테스트 메서드로 인식됩니다.
 	Junit 프레임워크는 @Test 붙은 메서드를 찾아서 실행하며,
