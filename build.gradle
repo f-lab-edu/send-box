@@ -3,13 +3,14 @@ plugins {
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 checkstyle {
     maxWarnings = 0
     configFile = file("${rootDir}/naver-checkstyle-rules.xml")
     configProperties = ["suppressionFile": "${rootDir}/naver-checkstyle-suppressions.xml"]
-    toolVersion = "8.24"
+    toolVersion('10.3.1')
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -32,8 +33,62 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // ORM JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // RDBMS H2
+    runtimeOnly 'com.h2database:h2'
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+//jacoco
+jacoco {
+    toolVersion = "0.8.11"
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+jacocoTestReport {
+    dependsOn test
+    finalizedBy 'jacocoTestCoverageVerification'
+
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+
+            element = 'CLASS'
+
+            includes = ['shop.sendbox.sendbox.*']
+            excludes = [
+                    'shop.sendbox.sendbox.SendboxApplication',
+                    'shop.sendbox.sendbox.base.*',  // 베이스 엔티티 클래스 제외
+                    'shop.sendbox.sendbox.security.config.*'  // 설정 클래스 제외
+            ]
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.70
+            }
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.70
+            }
+        }
+    }
 }
