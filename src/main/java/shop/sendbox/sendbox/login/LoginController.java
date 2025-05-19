@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import shop.sendbox.sendbox.api.ApiResponse;
 
@@ -16,7 +17,7 @@ public class LoginController {
 	private final LoginService loginService;
 
 	@PostMapping("/login")
-	public ApiResponse<LoginResponse> login(@RequestBody final LoginCreateRequest loginDto,
+	public ApiResponse<LoginResponse> login(@Valid @RequestBody final LoginCreateRequest loginDto,
 		final HttpServletRequest request) {
 		final LoginResponse loginResponse = loginService.login(loginDto.toServiceRequest());
 		final HttpSession session = request.getSession();
